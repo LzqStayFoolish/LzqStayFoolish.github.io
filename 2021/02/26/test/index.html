@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 5.4.0">
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误');
+                history.back();
+            }
+        }
+    })();
+</script>
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -341,7 +351,7 @@ daovoice('update');
 
     <footer class="post-footer">
           <div class="reward-container">
-  <div>您的支持将激励我继续创作!</div>
+  <div>虽然可能性不大，万一遇到了好心人呢!</div>
   <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
     赞赏
   </button>
