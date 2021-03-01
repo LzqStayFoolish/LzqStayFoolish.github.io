@@ -311,6 +311,16 @@
     
     
     
+     <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+  
+     </div>
 
     <footer class="post-footer">
           <div class="reward-container">
@@ -348,6 +358,7 @@
 
 
 
+    <div class="comments" id="lv-container" data-id="city" data-uid="Mi8xLzM="></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -426,6 +437,22 @@
 
 
 
+
+<script>
+NexT.utils.loadComments('#lv-container', () => {
+  window.livereOptions = {
+    refer: "2021/02/26/test/"
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
 
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/love.js"></script>
