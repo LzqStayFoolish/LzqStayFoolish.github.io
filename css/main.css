@@ -2923,7 +2923,7 @@ hr {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #94ff3c;
+  background: #69a38a;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2948,4 +2948,24 @@ hr {
 }
 .sub-menu .menu-item {
   display: inline-block;
+}
+body {
+  background-image: url("https:///casterliu_blog/background.jpg");
+  height: 100%;
+  width: 100%;
+  background-repeat: repeat-x;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+.content-wrap {
+  opacity: 0.85;
+}
+.sidebar {
+  opacity: 0.85;
+}
+.header-inner {
+  background: rgba(255,255,255,0.85);
+}
+.popup {
+  opacity: 0.9;
 }
