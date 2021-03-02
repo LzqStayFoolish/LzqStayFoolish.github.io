@@ -26,7 +26,11 @@
   <entry>
     <title>草稿test</title>
     <url>/2021/03/02/%E8%8D%89%E7%A8%BFtest/</url>
-    <content><![CDATA[<h2 id="这是一个测试"><a href="#这是一个测试" class="headerlink" title="这是一个测试"></a>这是一个测试<img src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/02/21pg9112951.jpg" alt="2-1PG9112951"></h2>]]></content>
+    <content><![CDATA[<h2 id="这是一个测试"><a href="#这是一个测试" class="headerlink" title="这是一个测试"></a>这是一个测试</h2><p><img src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/02/21pg9112951.jpg" alt="2-1PG9112951"></p>
+]]></content>
+      <categories>
+        <category>Life</category>
+      </categories>
       <tags>
         <tag>测试</tag>
       </tags>
