@@ -1183,11 +1183,11 @@ pre code {
 }
 .header-inner {
   margin: 0 auto;
-  width: 700px;
+  width: 1000px;
 }
 @media (min-width: 1200px) {
   .header-inner {
-    width: 800px;
+    width: 1200px;
   }
 }
 @media (min-width: 1600px) {
@@ -1688,11 +1688,11 @@ img:hover {
   flex-direction: column;
   justify-content: center;
   margin: 0 auto;
-  width: 700px;
+  width: 1000px;
 }
 @media (min-width: 1200px) {
   .footer-inner {
-    width: 800px;
+    width: 1200px;
   }
 }
 @media (min-width: 1600px) {
@@ -2847,11 +2847,11 @@ hr {
 }
 .main-inner {
   margin: 0 auto;
-  width: 700px;
+  width: 1000px;
 }
 @media (min-width: 1200px) {
   .main-inner {
-    width: 800px;
+    width: 1200px;
   }
 }
 @media (min-width: 1600px) {
@@ -2923,7 +2923,7 @@ hr {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #69a38a;
+  background: #ffcd2b;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2950,12 +2950,23 @@ hr {
   display: inline-block;
 }
 body {
-  background-image: url("https:///casterliu_blog/background.jpg");
+  background-image: url("https://source.unsplash.com/random/1600x900");
   height: 100%;
   width: 100%;
   background-repeat: repeat-x;
   background-attachment: fixed;
   background-size: 100% 100%;
+}
+.post {
+  margin-top: 60px;
+  margin-bottom: 60px;
+  padding: 25px;
+  -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
+  -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
+}
+.main-inner {
+  background: #fff;
+  opacity: 0.95;
 }
 .content-wrap {
   opacity: 0.85;
