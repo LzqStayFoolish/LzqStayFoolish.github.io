@@ -2993,9 +2993,6 @@ body {
 .sidebar {
   opacity: 0.9;
 }
-.header-inner {
-  background: rgba(255,255,255,0.9);
-}
 .popup {
   opacity: 0.9;
 }
@@ -3018,4 +3015,7 @@ body {
 .posts-expand .post-block {
   margin-bottom: 5px;
   margin-top: 5px;
+}
+.back-to-top {
+  border-radius: 0 0 18px 18px;
 }
