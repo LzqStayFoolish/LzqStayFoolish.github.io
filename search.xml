@@ -35,4 +35,63 @@
     <url>/2021/02/26/test/</url>
     <content><![CDATA[]]></content>
   </entry>
+  <entry>
+    <title>淘宝API总结</title>
+    <url>/2021/03/12/%E6%B7%98%E5%AE%9DAPI%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>最近负责的项目，需要对接淘宝提供的 <a href="https://open.taobao.com/api.htm?docId=24527&docType=2%20%E6%B7%98%E5%AE%9Dapi">淘宝api</a>，获取淘宝客的订单数据。在此过程中遇到了很多坑，特在此mark一下，可能对于一些大佬来说很简单，如果发现有错误欢迎指出。所有过程如下所示：</p>
+<ol>
+<li>基于Intellij IDEA 创建Maven项目</li>
+<li>将淘宝API依赖的jar包安装到本地maven仓库</li>
+<li>根据公开的请求实例编写java脚本，获取返回的订单数据（Jason格式）</li>
+<li>以javabean的形式解析json，并写到本地csv文件中</li>
+<li>通过Maven将项目达成jar包，上传到开发机上。</li>
+<li>编写shell脚本：执行jar包，并将生成的csv文件load到hive表中(作为fact层的明细数据)</li>
+<li>通过crontab命令，后台定期执行shell脚本。</li>
+<li>将订单数据与跳转数据关联，得到跳转pv/uv、转化率等指标。</li>
+</ol>
+<p>下面针对每一步进行介绍，并说明遇到的坑</p>
+<p>####创建Maven项目<br>鉴于maven的依赖管理优势，先利用Intellij IDEA 创建maven项目。<br><img data-src="https://img-blog.csdn.net/20180727221353621?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img data-src="https://img-blog.csdn.net/20180727221407423?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img data-src="https://img-blog.csdn.net/20180727221426518?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>####安装jar包到本地仓库<br>因为本项目依赖淘宝api的jar包，需要下载相应的sdk，其中<strong>提供了API的请求封装、摘要签名、响应解释、消息监听等功能，使用SDK可以轻松完成API的调用，API结果的获取，消息的实时监听</strong>。</p>
+<p>这里遇到了<strong>第一个坑</strong>：一开始考虑到python对jason的解析更方便（本人对python也更熟悉。。），想使用python写，但是调api时需要提供port，然而没拿到，最后还是使用了java。</p>
+<p>使用淘宝api的<strong>步骤：</strong>（<a href="https://open.taobao.com/doc.htm?docId=103232&docType=1">官方文档介绍</a>）</p>
+<ul>
+<li>你需要先创建相应的应用，获取App Key和App Secret。</li>
+<li>根据你的脚本语言，下载对应的jdk，包括java、python、.net等可供选择。</li>
+<li>获取jdk后，将其安装到本地maven仓库中（~/.m2/repository/）,<strong>安装命令为</strong>：mvn install:install-file -Dfile=jar包的位置(参数一) -DgroupId=groupId(参数二) -DartifactId=artifactId(参数三) -Dversion=version(参数四) -Dpackaging=jar</li>
+</ul>
+<p>安装完后，仓库和pom文件如下图所示：<br><img data-src="https://img-blog.csdn.net/20180727223452915?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img data-src="https://img-blog.csdn.net/20180727223504931?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><strong>maven在本地仓库中查找jar包是按照：groupId目录 到 artifactId目录 再到version目录的顺序查找。</strong></p>
+<p>####编写java请求脚本<br>用java编写，因为后面要解析json，因此需要在pom文件中添加如下依赖：<br><img data-src="https://img-blog.csdn.net/2018072722411946?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>淘宝提供的请求示例如下图所示（<a href="https://open.taobao.com/api.htm?docId=24527&docType=2">官方文档</a>）：<br><img data-src="https://img-blog.csdn.net/20180727224754167?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>响应式例：</p>
+<p><img data-src="https://img-blog.csdn.net/20180727224933562?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>以订单创建时间为准，每天获取前一天的数据，参数start_time设置每次请求的时间（取每分钟请求一次），setSpan设置每次查询时长（设置为60秒），因此要获取一天的数据就调用1440次。很容易能跑通该示例，最终结果形式为：<br><img data-src="https://img-blog.csdn.net/20180727230053769?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>####解析json</p>
+<p>解析json采用java bean的方式，将json转换成java对象，这里遇到<strong>第二个大坑：</strong>因为返回的json包含三层，因此一开始写了四个java实体类，但是可能对应关系没弄好，一直报错，太菜又一直没找到原因（心态有点小崩），最后在大神导师的指点下，直接用原生解析的方式获取最内层(n_tbk_order对应的json数组)，然后再转换成java对象，只需要一个bean文件（见下图）就行。灵活变通还是很重要的啊！！<br><img data-src="https://img-blog.csdn.net/20180727230954491?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>这里还有<strong>第三个坑</strong>：一开始大致观察数据（json字符串很长），以为返回的json数组中只包含一条订单数据，后来发现数据对不上，因此后来对数组遍历，果然发现数据`·量增加了，写代码<strong>逻辑一定要严谨啊！！</strong><br>####生成jar包<br>因为最终脚本要放在线上开发机上跑，因此需要打成jar包。一开使用Intellij IDEA 自带的project structure，但后来在开发机上一直报错，后来尝试使用maven插件，在pom文件中添加下列代码：<br><img data-src="https://img-blog.csdn.net/20180728164207489?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><strong>注意：记得修改mainClass的值，路径为：主程序包名.main程序名</strong><br><img data-src="https://img-blog.csdn.net/20180728164548166?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>最后在终端切换到maven项目根目录，执行命令：<strong>mvn clean package -Dmaven.test.skip=true -Dcheckstyle.skip=true</strong>，会在<br>即可在target目录下生成所需的jar包（名字中不带original的）。</p>
+<p>坑四：一开始在常用的开发机上跑，但是貌似不能访问外网，因此一直访问gw.api.taobao.com/router/rest出错，后来换了一台线上开发机，成功跑通了。。<br>####编写shell脚本<br>在开发机生成订单数据对应的csv后，编写shell脚本将其load到hive表中，方便后续的分析使用。因为是明细数据，因此建成fact表。</p>
+<p>创建分区表：<br>CREATE  TABLE ks_ad.dw_fact_commiosity_detail_di(id int,name string) partitioned by (dt STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘,‘ LINES TERMINATED BY ‘\n’STORED AS TEXTFILE;</p>
+<p>插入数据：<br>load data local inpath ‘owwo/xxx.csv’ into table xxx PARTITION (partcol1=val1, partcol2=val2 …)<br>####编写crontab命令<br>编写好shell脚本后，因为我们想要它每天定时执行，例如每天早上6点，这是就需要crontab命令，执行crontab -e添加用户调度任务。</p>
+<p><strong>crontab文件的含义：用户所建立的crontab文件中，每一行都代表一项任务，每行的每个字段代表一项设置，它的格式共分为六个字段，前五段是时间设定段，第六段是要执行的命令段，格式如下：</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">minute   hour   day   month   week   command     顺序：分 时 日 月 周 任务</span><br></pre></td></tr></table></figure>
+<p>本项目设置的是每天早上6段执行，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">00 06 * * * xx&#x2F;taobao.sh &gt;&gt; yy.log 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<p>上面命令后半段是将成的标准输出添加到log文件中，方便查看报错。</p>
+<p>其中&amp; 1 ，表示文件描述符 1指标准输出stdout。<br>对于2，表示标准错误，stderr。<br><strong>2&gt;&amp;1 的意思就是将标准错误重定向到标准输出，而标准输出已经重定向到了yy.log中，因此最终都会在log中显示。</strong></p>
+<p><strong>这里还有个坑：</strong></p>
+<ul>
+<li>使用contrab时默认以contrab用户的身份执行shell文件，因此首先需要用chmod命令改变jar包和shell脚本的权限，暴力点可以直接chmod 777 xx.sh</li>
+<li>另外，crontab默认将生成的csv文件保存在根目录/home下，因此在jar包中要注意输出csv的路径，否则后面load数据会找不到csv文件。<br>####关联跳转数据<br>完成上面的步骤后，在hive中就可以得到我们所需的订单数据表了。后面根据业务需求，与其他进行数据进行关联分析。</li>
+</ul>
+<p>####后记<br>虽然这只是一个小需求，但是种种bug还是让人很头疼。当然最开心的是，在解决的过程中自己学到了很多东西。非常感谢我的mentor，他的耐心解答为我提供了非常大的帮助。</p>
+]]></content>
+      <categories>
+        <category>项目总结</category>
+      </categories>
+      <tags>
+        <tag>淘宝api</tag>
+        <tag>大数据</tag>
+        <tag>数据仓库</tag>
+      </tags>
+  </entry>
 </search>
