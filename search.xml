@@ -62,4 +62,24 @@
         <tag>数据仓库</tag>
       </tags>
   </entry>
+  <entry>
+    <title>广义相加模型（GAMs）</title>
+    <url>/2021/03/15/%E5%B9%BF%E4%B9%89%E7%9B%B8%E5%8A%A0%E6%A8%A1%E5%9E%8B%EF%BC%88GAMs%EF%BC%89/</url>
+    <content><![CDATA[<p>本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>在现实生活中，变量的作用通常不是线性的，线性假设很可能不能满足实际需求，甚至直接违背实际情况，广义相加模型是一种在线性的框架内，构造非线性的响应模型的方法。<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/15/16157982314089.jpg"></p>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ol>
+<li>可以引入非线性函数;</li>
+<li>非线性可能使得对预测的更准确;</li>
+<li>因为是”加性的”，所以，线性模型的假设检验的方法仍然可以使用;</li>
+<li>因为是“加性”假设，所以GAMs中可能会缺失重要的交互作用，只能通过手动添加交互项来弥补;</li>
+</ol>
+]]></content>
+      <categories>
+        <category>技术文章</category>
+      </categories>
+      <tags>
+        <tag>广义相加模型</tag>
+        <tag>统计学</tag>
+      </tags>
+  </entry>
 </search>
