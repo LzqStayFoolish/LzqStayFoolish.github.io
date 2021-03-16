@@ -66,6 +66,7 @@
     <title>广义相加模型（GAMs）</title>
     <url>/2021/03/15/%E5%B9%BF%E4%B9%89%E7%9B%B8%E5%8A%A0%E6%A8%A1%E5%9E%8B%EF%BC%88GAMs%EF%BC%89/</url>
     <content><![CDATA[<p>本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。</p>
+<span id="more"></span>
 <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>在现实生活中，变量的作用通常不是线性的，线性假设很可能不能满足实际需求，甚至直接违背实际情况，GAM是一种在线性的框架内，构造非线性的响应模型的方法。</p>
 <h2 id="GAM模型形式"><a href="#GAM模型形式" class="headerlink" title="GAM模型形式"></a>GAM模型形式</h2><p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158075682624.jpg" alt="-w457"><br>其中函数<strong>f</strong>可以是线性项、多项式项、样条函数或核函数。</p>
 <h3 id="样条函数"><a href="#样条函数" class="headerlink" title="样条函数"></a>样条函数</h3><p>简单线性回归和多项式回归的拟合都是全局性的，使用相同的方程预测自变量的每一个值所对应的因变量。然而实际中随着自变量取值的变化，其与因变量之间的关系也可能是在不断变化的。</p>
