@@ -3,8 +3,7 @@
   <entry>
     <title>淘宝API总结</title>
     <url>/2021/03/12/%E6%B7%98%E5%AE%9DAPI%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<p>最近负责的项目，需要对接淘宝提供的 <a href="https://open.taobao.com/api.htm?docId=24527&docType=2%20%E6%B7%98%E5%AE%9Dapi">淘宝api</a>，获取淘宝客的订单数据。在此过程中遇到了很多坑，特在此mark一下，可能对于一些大佬来说很简单，如果发现有错误欢迎指出。所有过程如下所示：</p>
-<span id="more"></span>
+    <content><![CDATA[<p>最近负责的项目，需要对接淘宝提供的 <a href="https://open.taobao.com/api.htm?docId=24527&amp;docType=2%20%E6%B7%98%E5%AE%9Dapi">淘宝api</a>，获取淘宝客的订单数据。在此过程中遇到了很多坑，特在此mark一下，可能对于一些大佬来说很简单，如果发现有错误欢迎指出。所有过程如下所示：<br><span id="more"></span></p>
 <ol>
 <li>基于Intellij IDEA 创建Maven项目</li>
 <li>将淘宝API依赖的jar包安装到本地maven仓库</li>
@@ -19,7 +18,7 @@
 <h3 id="创建Maven项目"><a href="#创建Maven项目" class="headerlink" title="创建Maven项目"></a>创建Maven项目</h3><p>鉴于maven的依赖管理优势，先利用Intellij IDEA 创建maven项目。<br><img data-src="https://img-blog.csdn.net/20180727221353621?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img data-src="https://img-blog.csdn.net/20180727221407423?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img data-src="https://img-blog.csdn.net/20180727221426518?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
 <h3 id="安装jar包到本地仓库"><a href="#安装jar包到本地仓库" class="headerlink" title="安装jar包到本地仓库"></a>安装jar包到本地仓库</h3><p>因为本项目依赖淘宝api的jar包，需要下载相应的sdk，其中<strong>提供了API的请求封装、摘要签名、响应解释、消息监听等功能，使用SDK可以轻松完成API的调用，API结果的获取，消息的实时监听</strong>。</p>
 <p>这里遇到了<strong>第一个坑</strong>：一开始考虑到python对jason的解析更方便（本人对python也更熟悉。。），想使用python写，但是调api时需要提供port，然而没拿到，最后还是使用了java。</p>
-<p>使用淘宝api的<strong>步骤：</strong>（<a href="https://open.taobao.com/doc.htm?docId=103232&docType=1">官方文档介绍</a>）</p>
+<p>使用淘宝api的<strong>步骤：</strong>（<a href="https://open.taobao.com/doc.htm?docId=103232&amp;docType=1">官方文档介绍</a>）</p>
 <ul>
 <li>你需要先创建相应的应用，获取App Key和App Secret。</li>
 <li>根据你的脚本语言，下载对应的jdk，包括java、python、.net等可供选择。</li>
@@ -27,7 +26,7 @@
 </ul>
 <p>安装完后，仓库和pom文件如下图所示：<br><img data-src="https://img-blog.csdn.net/20180727223452915?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img data-src="https://img-blog.csdn.net/20180727223504931?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><strong>maven在本地仓库中查找jar包是按照：groupId目录 到 artifactId目录 再到version目录的顺序查找。</strong></p>
 <h3 id="编写java请求脚本"><a href="#编写java请求脚本" class="headerlink" title="编写java请求脚本"></a>编写java请求脚本</h3><p>用java编写，因为后面要解析json，因此需要在pom文件中添加如下依赖：<br><img data-src="https://img-blog.csdn.net/2018072722411946?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
-<p>淘宝提供的请求示例如下图所示（<a href="https://open.taobao.com/api.htm?docId=24527&docType=2">官方文档</a>）：<br><img data-src="https://img-blog.csdn.net/20180727224754167?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>淘宝提供的请求示例如下图所示（<a href="https://open.taobao.com/api.htm?docId=24527&amp;docType=2">官方文档</a>）：<br><img data-src="https://img-blog.csdn.net/20180727224754167?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
 <p>响应式例：</p>
 <p><img data-src="https://img-blog.csdn.net/20180727224933562?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
 <p>以订单创建时间为准，每天获取前一天的数据，参数start_time设置每次请求的时间（取每分钟请求一次），setSpan设置每次查询时长（设置为60秒），因此要获取一天的数据就调用1440次。很容易能跑通该示例，最终结果形式为：<br><img data-src="https://img-blog.csdn.net/20180727230053769?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
@@ -37,14 +36,12 @@
 <p>最后在终端切换到maven项目根目录，执行命令：<strong>mvn clean package -Dmaven.test.skip=true -Dcheckstyle.skip=true</strong>，会在<br>即可在target目录下生成所需的jar包（名字中不带original的）。</p>
 <p>坑四：一开始在常用的开发机上跑，但是貌似不能访问外网，因此一直访问gw.api.taobao.com/router/rest出错，后来换了一台线上开发机，成功跑通了。。</p>
 <h3 id="编写shell脚本"><a href="#编写shell脚本" class="headerlink" title="编写shell脚本"></a>编写shell脚本</h3><p>在开发机生成订单数据对应的csv后，编写shell脚本将其load到hive表中，方便后续的分析使用。因为是明细数据，因此建成fact表。</p>
-<p>创建分区表：<br>CREATE  TABLE ks_ad.dw_fact_commiosity_detail_di(id int,name string) partitioned by (dt STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘,‘ LINES TERMINATED BY ‘\n’STORED AS TEXTFILE;</p>
+<p>创建分区表：<br>CREATE  TABLE ks_ad.dw_fact_commiosity_detail_di(id int,name string) partitioned by (dt STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘\,’ LINES TERMINATED BY ‘\n’STORED AS TEXTFILE;</p>
 <p>插入数据：<br>load data local inpath ‘owwo/xxx.csv’ into table xxx PARTITION (partcol1=val1, partcol2=val2 …)</p>
 <h3 id="编写crontab命令"><a href="#编写crontab命令" class="headerlink" title="编写crontab命令"></a>编写crontab命令</h3><p>编写好shell脚本后，因为我们想要它每天定时执行，例如每天早上6点，这是就需要crontab命令，执行crontab -e添加用户调度任务。</p>
 <p><strong>crontab文件的含义：用户所建立的crontab文件中，每一行都代表一项任务，每行的每个字段代表一项设置，它的格式共分为六个字段，前五段是时间设定段，第六段是要执行的命令段，格式如下：</strong></p>
 <figure class="highlight excel"><table><tr><td class="code"><pre><span class="line"><span class="built_in">minute</span>   <span class="built_in">hour</span>   <span class="built_in">day</span>   <span class="built_in">month</span>   week   command     顺序：分 时 日 月 周 任务</span><br></pre></td></tr></table></figure>
-<p>本项目设置的是每天早上6段执行，如下所示：</p>
-<figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">00 </span><span class="number">06</span> * * * xx/taobao.sh &gt;&gt; yy.<span class="keyword">log</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>上面命令后半段是将成的标准输出添加到log文件中，方便查看报错。</p>
+<p>本项目设置的是每天早上6段执行，如下所示：<br><figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">00 </span><span class="number">06</span> * * * xx/taobao.sh &gt;&gt; yy.<span class="keyword">log</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure><br>上面命令后半段是将成的标准输出添加到log文件中，方便查看报错。</p>
 <p>其中&amp; 1 ，表示文件描述符 1指标准输出stdout。<br>对于2，表示标准错误，stderr。<br><strong>2&gt;&amp;1 的意思就是将标准错误重定向到标准输出，而标准输出已经重定向到了yy.log中，因此最终都会在log中显示。</strong></p>
 <p><strong>这里还有个坑：</strong></p>
 <ul>
@@ -65,8 +62,7 @@
   <entry>
     <title>广义相加模型（GAMs）</title>
     <url>/2021/03/15/%E5%B9%BF%E4%B9%89%E7%9B%B8%E5%8A%A0%E6%A8%A1%E5%9E%8B%EF%BC%88GAMs%EF%BC%89/</url>
-    <content><![CDATA[<p>本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。</p>
-<span id="more"></span>
+    <content><![CDATA[<p>本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。<br><span id="more"></span></p>
 <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>在现实生活中，变量的作用通常不是线性的，线性假设很可能不能满足实际需求，甚至直接违背实际情况，GAM是一种在线性的框架内，构造非线性的响应模型的方法。</p>
 <h2 id="GAM模型形式"><a href="#GAM模型形式" class="headerlink" title="GAM模型形式"></a>GAM模型形式</h2><p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158075682624.jpg" alt="-w457"><br>其中函数<strong>f</strong>可以是线性项、多项式项、样条函数或核函数。</p>
 <h3 id="样条函数"><a href="#样条函数" class="headerlink" title="样条函数"></a>样条函数</h3><p>简单线性回归和多项式回归的拟合都是全局性的，使用相同的方程预测自变量的每一个值所对应的因变量。然而实际中随着自变量取值的变化，其与因变量之间的关系也可能是在不断变化的。</p>
@@ -87,16 +83,16 @@
 </ul>
 <p>常见样条函数：</p>
 <ul>
-<li>三次样条函数：具有连续性、且一阶和二阶导连续的三阶分段多项式<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158752032767.jpg"></li>
+<li>三次样条函数：具有连续性、且一阶和二阶导连续的三阶分段多项式<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158752032767.jpg" alt=""></li>
 <li>薄板样条函数：可同时平滑多个变量，因此一般在研究多个变量的交互作用时使用</li>
 </ul>
-<h4 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h4><p>假设我们样条函数为g(x),再求得该函数参数的同时，如何保证样条曲线的平滑性呢？<br>添加对平滑性的惩罚项<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158760751925.jpg"><br>上式中的惩罚项表示为对区间t内，一阶导数*g′(t)*累计的变化情况，因此可以用来衡量该段区间整体的平滑性。<br>整体拟合函数项为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158761324407.jpg"></p>
-<h5 id="backfitting方法"><a href="#backfitting方法" class="headerlink" title="backfitting方法"></a>backfitting方法</h5><p>使用backfitting（回修）方法求解整体拟合函数，方法流程为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158780340453.jpg"></p>
+<h4 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h4><p>假设我们样条函数为g(x),再求得该函数参数的同时，如何保证样条曲线的平滑性呢？<br>添加对平滑性的惩罚项<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158760751925.jpg" alt=""><br>上式中的惩罚项表示为对区间t内，一阶导数<em>g′(t)</em>累计的变化情况，因此可以用来衡量该段区间整体的平滑性。<br>整体拟合函数项为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158761324407.jpg" alt=""></p>
+<h5 id="backfitting方法"><a href="#backfitting方法" class="headerlink" title="backfitting方法"></a>backfitting方法</h5><p>使用backfitting（回修）方法求解整体拟合函数，方法流程为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158780340453.jpg" alt=""></p>
 <h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ol>
 <li>可以引入非线性函数;</li>
 <li>非线性可能使得对预测的更准确;</li>
 <li>因为是”加性的”，所以，线性模型的假设检验的方法仍然可以使用;</li>
-<li>因为是“加性”假设，所以GAMs中可能会缺失重要的交互作用，只能通过手动添加交互项来弥补，如下所示：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158769920356.jpg"><br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158770656414.jpg"></li>
+<li>因为是“加性”假设，所以GAMs中可能会缺失重要的交互作用，只能通过手动添加交互项来弥补，如下所示：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158769920356.jpg" alt=""><br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158770656414.jpg" alt=""></li>
 </ol>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>可加模型提供一个有用的线性模型拓展，使得不仅保留着大部分的可解释性，也更加灵活；</p>
 ]]></content>
@@ -118,11 +114,10 @@
 </ul>
 <p>核心解法思路：</p>
 <ul>
-<li>根据用户画像、用户活跃度和用户行为特征，通过uplift增益模型对手百实验进行增益学习，发现对手百指标的影响（正向、负向、无影响），找到产品策略”敏感人群”；筛选出高增益的用户进行人群投放，提升手百关键指标，如DAU、留存等；根据uplift模型，可将人群划分至下面四象限中，找到persuadables（实验带来正向效果）的人群，具体如下：<center>![](/media/2021-12-13 /16393794522173.jpg)</center>
-
-</li>
+<li>根据用户画像、用户活跃度和用户行为特征，通过uplift增益模型对手百实验进行增益学习，发现对手百指标的影响（正向、负向、无影响），找到产品策略”敏感人群”；筛选出高增益的用户进行人群投放，提升手百关键指标，如DAU、留存等；</li>
 </ul>
-<h3 id="2-理论综述"><a href="#2-理论综述" class="headerlink" title="2. 理论综述"></a>2. 理论综述</h3><h4 id="因果推断"><a href="#因果推断" class="headerlink" title="因果推断"></a>因果推断</h4><h4 id="uplift模型"><a href="#uplift模型" class="headerlink" title="uplift模型"></a>uplift模型</h4><h5 id="标签转化模型-Class-Transformation-Method"><a href="#标签转化模型-Class-Transformation-Method" class="headerlink" title="标签转化模型(Class Transformation Method)"></a>标签转化模型(Class Transformation Method)</h5><p>标签转化模型适合二分类<br>标签设置：<br>![](/media/2021-12-23 /16402634500093.jpg)</p>
+<p>根据uplift模型，可将人群划分至下面四象限中，找到persuadables（实验带来正向效果）的人群，具体如下：<br> <center>![](/media/2021-12-13 /16393794522173.jpg)</center></p>
+<h3 id="2-理论综述"><a href="#2-理论综述" class="headerlink" title="2. 理论综述"></a>2. 理论综述</h3><h4 id="因果推断"><a href="#因果推断" class="headerlink" title="因果推断"></a>因果推断</h4><h4 id="uplift模型"><a href="#uplift模型" class="headerlink" title="uplift模型"></a>uplift模型</h4><h5 id="标签转化模型-Class-Transformation-Method"><a href="#标签转化模型-Class-Transformation-Method" class="headerlink" title="标签转化模型(Class Transformation Method)"></a>标签转化模型(Class Transformation Method)</h5><p>标签转化模型适合二分类<br>标签设置：<br><img data-src="/media/2021-12-23 /16402634500093.jpg" alt=""></p>
 <p>实验组对照组数据打通和模型打通的方法叫做class transformation method，uplift分数τ 可以表示为：</p>
 <p>理论证明：</p>
 <pre><code>下面来证明上面的式子相当于是求P（Z = 1|X）
@@ -132,15 +127,12 @@
 
 
 那么：
-</code></pre>
-<p>实际应用：</p>
+</code></pre><p>实际应用：</p>
 <pre><code>计算的uplift score实际上就是优化P（z=1|x），所以这个方法称为Class Transformation Method.
-</code></pre>
-<p>模型优点：</p>
+</code></pre><p>模型优点：</p>
 <pre><code>实际上，Z = 1 Z=1Z=1就是实验组中下单的用户和对照组中未下单的用户，因此可以直接将实验组和对照组用户合并，使用一个模型建模，实现了数据层面和模型层面的打通。
 预测时，模型预测的结果就是uplift score，这点与差分响应模型不同。
-</code></pre>
-<h5 id="S-learner（Meta-Learning）"><a href="#S-learner（Meta-Learning）" class="headerlink" title="S-learner（Meta-Learning）"></a>S-learner（Meta-Learning）</h5><p>把对照组和实验组放在一起建模，把实验分组作为特征加入训练特征。如果该样本进入实验组vs对照组模型预测的差异作为对实验影响的估计。<br>计算步骤：</p>
+</code></pre><h5 id="S-learner（Meta-Learning）"><a href="#S-learner（Meta-Learning）" class="headerlink" title="S-learner（Meta-Learning）"></a>S-learner（Meta-Learning）</h5><p>把对照组和实验组放在一起建模，把实验分组作为特征加入训练特征。如果该样本进入实验组vs对照组模型预测的差异作为对实验影响的估计。<br>计算步骤：</p>
 <ol>
 <li>基于变量X和干预W训练预测模型</li>
 <li>分别估计干预和不干预时的得分，差值即为增量  </li>
@@ -161,7 +153,7 @@
 <li>把对照组放进实验组模型预测，再把实验组放进对照组模型预测，预测值和实际值的差作为HTE的近似。这里和S-Learner的思路近似是imputation的做法。</li>
 <li>实验组和对照组分别对上述target建模得到M3,M4，每个样本得到两个预测值然后加权，权重一般可选propensity score，随机实验中可以直接用进组用户数，流量相同的随机实验直接用0.5感觉也没啥问题。</li>
 </ol>
-<h5 id="树模型-Tree-Based-Method"><a href="#树模型-Tree-Based-Method" class="headerlink" title="树模型(Tree-Based Method)"></a>树模型(Tree-Based Method)</h5><h3 id="3-整体框架"><a href="#3-整体框架" class="headerlink" title="3. 整体框架"></a>3. 整体框架</h3><p>![-w600](/media/2021-12-23 /16402504699350.jpg)</p>
+<h5 id="树模型-Tree-Based-Method"><a href="#树模型-Tree-Based-Method" class="headerlink" title="树模型(Tree-Based Method)"></a>树模型(Tree-Based Method)</h5><h3 id="3-整体框架"><a href="#3-整体框架" class="headerlink" title="3. 整体框架"></a>3. 整体框架</h3><p><img data-src="/media/2021-12-23 /16402504699350.jpg" alt="-w600"></p>
 <h3 id="4-项目流程"><a href="#4-项目流程" class="headerlink" title="4. 项目流程"></a>4. 项目流程</h3><h3 id="5-实践收益"><a href="#5-实践收益" class="headerlink" title="5. 实践收益"></a>5. 实践收益</h3><h3 id="6-问题及解决方式"><a href="#6-问题及解决方式" class="headerlink" title="6. 问题及解决方式"></a>6. 问题及解决方式</h3><h4 id="6-1-任务分散，人工操作过多"><a href="#6-1-任务分散，人工操作过多" class="headerlink" title="6.1 任务分散，人工操作过多"></a>6.1 任务分散，人工操作过多</h4><p>问题描述：</p>
 <ul>
 <li>项目包含基于scala的spark任务和基于python的模型代码；</li>
@@ -219,25 +211,26 @@
 </center>
 针对关键路径转化“UV-点击”、“点击-加入购物车”、“购物车-支付成功”，不同商品的转化率进行比较分析，监测SKU的更新变化。
 
-<h5 id="1-2-商品分类分析"><a href="#1-2-商品分类分析" class="headerlink" title="1.2 商品分类分析"></a>1.2 商品分类分析</h5><p>根据商品品类的转化率，利用<strong>波士顿矩阵</strong>将商品品类分成以下4种。</p>
-<ul>
-<li>导流型品类：利润非常低，但是购买量大、市场需求大，目的在于导流。</li>
-<li>高利润型品类：利润率高，希望用户更多购买此类商品。</li>
-<li>高转化品类：带量。</li>
-<li>未来明星型品类：这是电商平台的潜力股，虽然曝光量很低，但是转化率极高。<br>![](/media/2021-12-21 /16400730073528.jpg)</li>
-</ul>
-<p>上图的<strong>波士顿矩阵</strong>，横坐标代表商品的曝光量，纵坐标是商品的转化率，图中的每一个圆圈代表一个品类的商品。右上角的商品品类曝光量大、转化率高，是现金流的重要业务；而左上角的商品虽然曝光率非常低，但是转化率极高，属于我们上面提到的未来明星型品类，对于这一类商品，我们在后期的运营中可以增加其曝光量。</p>
-<h5 id="V1版"><a href="#V1版" class="headerlink" title="V1版"></a>V1版</h5><p>依据波士顿矩阵，从曝光量 -&gt; 转化率 -&gt; 回购率三个方向对商品进行划分，将商品分为八类。<br>定义：</p>
-<ul>
-<li>曝光量：两周内商品的曝光次数</li>
-<li>转化率：两周内商品的订单转化次数/点击次数</li>
-<li>回购率：两周内转化的商品在未来一周内产生复购的量/两周内的转化量<center>![](/media/2022-01-05 /16413507381583.jpg)</center>
+##### 1.2 商品分类分析
+根据商品品类的转化率，利用**波士顿矩阵**将商品品类分成以下4种。
+- 导流型品类：利润非常低，但是购买量大、市场需求大，目的在于导流。
+- 高利润型品类：利润率高，希望用户更多购买此类商品。
+- 高转化品类：带量。
+- 未来明星型品类：这是电商平台的潜力股，虽然曝光量很低，但是转化率极高。
+![](/media/2021-12-21 /16400730073528.jpg)
+
+上图的**波士顿矩阵**，横坐标代表商品的曝光量，纵坐标是商品的转化率，图中的每一个圆圈代表一个品类的商品。右上角的商品品类曝光量大、转化率高，是现金流的重要业务；而左上角的商品虽然曝光率非常低，但是转化率极高，属于我们上面提到的未来明星型品类，对于这一类商品，我们在后期的运营中可以增加其曝光量。
+##### V1版
+依据波士顿矩阵，从曝光量 -> 转化率 -> 回购率三个方向对商品进行划分，将商品分为八类。
+定义：
+- 曝光量：两周内商品的曝光次数
+- 转化率：两周内商品的订单转化次数/点击次数
+- 回购率：两周内转化的商品在未来一周内产生复购的量/两周内的转化量
+<center>![](/media/2022-01-05 /16413507381583.jpg)</center>
 商品划分后，可拆分如下商品转化路径，不同转化都存在对应策略。
 <center>![](/media/2022-01-05 /16413654649297.jpg)
 </center>
 
-</li>
-</ul>
 <h3 id="2-用户分析-精准营销"><a href="#2-用户分析-精准营销" class="headerlink" title="2. 用户分析-精准营销"></a>2. 用户分析-精准营销</h3><p>通过用户全生命周期精准营销和精细化运营，提升用户增长的北极星目标，其场景和流程如下图所示：</p>
 <center>![-w400](/media/2021-12-21 /16400859137520.jpg)![-w200](/media/2021-12-21 /16400861978019.jpg)
 </center>
@@ -348,10 +341,10 @@ Lookalike的目的是基于目标人群，从海量的人群中找出和目标�
 
 </li>
 </ul>
-<h5 id="基于项目的协同过滤"><a href="#基于项目的协同过滤" class="headerlink" title="基于项目的协同过滤"></a>基于项目的协同过滤</h5><p>1.收集用户购买信息，构建user-item矩阵<br>![](/media/2022-01-05 /16413688335077.jpg)<br>2.针对项目的最近邻搜索<br>先计算已评价项目和待预测项目的相似度，并以相似度作为权重，加权各已评价项目的分数，得到待预测项目的预测值。例如：要对项目 A 和项目 B 进行相似性计算，要先找出同时对 A 和 B 打过分的组合，对这些组合进行相似度计算。<br>3.产生推荐结果<br>以项目为基础的协同过滤不用考虑用户间的差别，所以精度比较差。但是却不需要用户的历史数据，或是进行用户识别。对于项目来讲，它们之间的相似性要稳定很多，因此可以离线完成工作量最大的相似性计算步骤，从而降低了在线计算量，提高推荐效率，尤其是在用户多于项目的情形下尤为显著ds</p>
-<h5 id="转化路径"><a href="#转化路径" class="headerlink" title="转化路径"></a>转化路径</h5><center>![-w550](/media/2021-12-21 /16400722835686.jpg)
-</center>
-不同商品生成转化路径分析，找出影响最终支付完成的转折点。]]></content>
+<h5 id="基于项目的协同过滤"><a href="#基于项目的协同过滤" class="headerlink" title="基于项目的协同过滤"></a>基于项目的协同过滤</h5><p>1.收集用户购买信息，构建user-item矩阵<br><img data-src="/media/2022-01-05 /16413688335077.jpg" alt=""><br>2.针对项目的最近邻搜索<br>先计算已评价项目和待预测项目的相似度，并以相似度作为权重，加权各已评价项目的分数，得到待预测项目的预测值。例如：要对项目 A 和项目 B 进行相似性计算，要先找出同时对 A 和 B 打过分的组合，对这些组合进行相似度计算。<br>3.产生推荐结果<br>以项目为基础的协同过滤不用考虑用户间的差别，所以精度比较差。但是却不需要用户的历史数据，或是进行用户识别。对于项目来讲，它们之间的相似性要稳定很多，因此可以离线完成工作量最大的相似性计算步骤，从而降低了在线计算量，提高推荐效率，尤其是在用户多于项目的情形下尤为显著ds</p>
+<h5 id="转化路径"><a href="#转化路径" class="headerlink" title="转化路径"></a>转化路径</h5><p><center>![-w550](/media/2021-12-21 /16400722835686.jpg)
+</center><br>不同商品生成转化路径分析，找出影响最终支付完成的转折点。</p>
+]]></content>
       <tags>
         <tag>电商分析方法</tag>
         <tag>精准营销</tag>
@@ -374,7 +367,7 @@ Lookalike的目的是基于目标人群，从海量的人群中找出和目标�
 <li>在某偏远地区随机抽取若干健康男子，检验其脉搏均数是否高于全体健康男子平均水平（单侧检验）</li>
 </ul>
 </li>
-<li>原理：<br> a= \frac{a}{b}</li>
+<li>原理：<script type="math/tex; mode=display">a= \frac{a}{b}</script></li>
 </ol>
 <h5 id="1-2-两独立样本均值检验：常用于A-B实验中"><a href="#1-2-两独立样本均值检验：常用于A-B实验中" class="headerlink" title="1.2 两独立样本均值检验：常用于A/B实验中"></a>1.2 两独立样本均值检验：常用于A/B实验中</h5><ol>
 <li>目的：检验两独立样本的均值是否相等。</li>
@@ -392,12 +385,12 @@ Lookalike的目的是基于目标人群，从海量的人群中找出和目标�
 <li>正态数据或近似正态</li>
 </ul>
 </li>
-<li>应用场景举例：</li>
-</ol>
-<ul>
+<li>应用场景举例：<ul>
 <li>配对的受试对象分别接受不同的处理（如将小白鼠配对为两组，分别接受不同的处理，检验处理结果的差异）</li>
 <li>同一受试对象的自身前后对照（如检验癌症患者术前、术后的某种指标的差异）</li>
 </ul>
+</li>
+</ol>
 <h2 id="2-A-B实验流程"><a href="#2-A-B实验流程" class="headerlink" title="2. A/B实验流程"></a>2. A/B实验流程</h2><h2 id="3-业务阈值"><a href="#3-业务阈值" class="headerlink" title="3. 业务阈值"></a>3. 业务阈值</h2>]]></content>
   </entry>
 </search>

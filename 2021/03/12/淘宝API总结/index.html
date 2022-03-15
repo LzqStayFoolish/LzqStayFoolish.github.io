@@ -43,12 +43,12 @@ daovoice('update');
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":240,"display":"hide","padding":18,"offset":20},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":"ture","trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="最近负责的项目，需要对接淘宝提供的 淘宝api，获取淘宝客的订单数据。在此过程中遇到了很多坑，特在此mark一下，可能对于一些大佬来说很简单，如果发现有错误欢迎指出。所有过程如下所示：">
+<meta name="description" content="最近负责的项目，需要对接淘宝提供的 淘宝api，获取淘宝客的订单数据。在此过程中遇到了很多坑，特在此mark一下，可能对于一些大佬来说很简单，如果发现有错误欢迎指出。所有过程如下所示：  基于Intellij IDEA 创建Maven项目 将淘宝API依赖的jar包安装到本地maven仓库 根据公开的请求实例编写java脚本，获取返回的订单数据（Jason格式） 以javabean的形式解析jso">
 <meta property="og:type" content="article">
 <meta property="og:title" content="淘宝API总结">
 <meta property="og:url" content="http://example.com/2021/03/12/%E6%B7%98%E5%AE%9DAPI%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="Casterliu">
-<meta property="og:description" content="最近负责的项目，需要对接淘宝提供的 淘宝api，获取淘宝客的订单数据。在此过程中遇到了很多坑，特在此mark一下，可能对于一些大佬来说很简单，如果发现有错误欢迎指出。所有过程如下所示：">
+<meta property="og:description" content="最近负责的项目，需要对接淘宝提供的 淘宝api，获取淘宝客的订单数据。在此过程中遇到了很多坑，特在此mark一下，可能对于一些大佬来说很简单，如果发现有错误欢迎指出。所有过程如下所示：  基于Intellij IDEA 创建Maven项目 将淘宝API依赖的jar包安装到本地maven仓库 根据公开的请求实例编写java脚本，获取返回的订单数据（Jason格式） 以javabean的形式解析jso">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdn.net/20180727221353621?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="https://img-blog.csdn.net/20180727221407423?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
@@ -125,7 +125,11 @@ daovoice('update');
   </style>
 </noscript>
 
-</head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
@@ -381,8 +385,7 @@ daovoice('update');
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>最近负责的项目，需要对接淘宝提供的 <a target="_blank" rel="noopener" href="https://open.taobao.com/api.htm?docId=24527&docType=2%20%E6%B7%98%E5%AE%9Dapi">淘宝api</a>，获取淘宝客的订单数据。在此过程中遇到了很多坑，特在此mark一下，可能对于一些大佬来说很简单，如果发现有错误欢迎指出。所有过程如下所示：</p>
-<span id="more"></span>
+        <p>最近负责的项目，需要对接淘宝提供的 <a target="_blank" rel="noopener" href="https://open.taobao.com/api.htm?docId=24527&amp;docType=2%20%E6%B7%98%E5%AE%9Dapi">淘宝api</a>，获取淘宝客的订单数据。在此过程中遇到了很多坑，特在此mark一下，可能对于一些大佬来说很简单，如果发现有错误欢迎指出。所有过程如下所示：<br><span id="more"></span></p>
 <ol>
 <li>基于Intellij IDEA 创建Maven项目</li>
 <li>将淘宝API依赖的jar包安装到本地maven仓库</li>
@@ -397,7 +400,7 @@ daovoice('update');
 <h3 id="创建Maven项目"><a href="#创建Maven项目" class="headerlink" title="创建Maven项目"></a>创建Maven项目</h3><p>鉴于maven的依赖管理优势，先利用Intellij IDEA 创建maven项目。<br><img data-src="https://img-blog.csdn.net/20180727221353621?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img data-src="https://img-blog.csdn.net/20180727221407423?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img data-src="https://img-blog.csdn.net/20180727221426518?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
 <h3 id="安装jar包到本地仓库"><a href="#安装jar包到本地仓库" class="headerlink" title="安装jar包到本地仓库"></a>安装jar包到本地仓库</h3><p>因为本项目依赖淘宝api的jar包，需要下载相应的sdk，其中<strong>提供了API的请求封装、摘要签名、响应解释、消息监听等功能，使用SDK可以轻松完成API的调用，API结果的获取，消息的实时监听</strong>。</p>
 <p>这里遇到了<strong>第一个坑</strong>：一开始考虑到python对jason的解析更方便（本人对python也更熟悉。。），想使用python写，但是调api时需要提供port，然而没拿到，最后还是使用了java。</p>
-<p>使用淘宝api的<strong>步骤：</strong>（<a target="_blank" rel="noopener" href="https://open.taobao.com/doc.htm?docId=103232&docType=1">官方文档介绍</a>）</p>
+<p>使用淘宝api的<strong>步骤：</strong>（<a target="_blank" rel="noopener" href="https://open.taobao.com/doc.htm?docId=103232&amp;docType=1">官方文档介绍</a>）</p>
 <ul>
 <li>你需要先创建相应的应用，获取App Key和App Secret。</li>
 <li>根据你的脚本语言，下载对应的jdk，包括java、python、.net等可供选择。</li>
@@ -405,7 +408,7 @@ daovoice('update');
 </ul>
 <p>安装完后，仓库和pom文件如下图所示：<br><img data-src="https://img-blog.csdn.net/20180727223452915?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img data-src="https://img-blog.csdn.net/20180727223504931?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><strong>maven在本地仓库中查找jar包是按照：groupId目录 到 artifactId目录 再到version目录的顺序查找。</strong></p>
 <h3 id="编写java请求脚本"><a href="#编写java请求脚本" class="headerlink" title="编写java请求脚本"></a>编写java请求脚本</h3><p>用java编写，因为后面要解析json，因此需要在pom文件中添加如下依赖：<br><img data-src="https://img-blog.csdn.net/2018072722411946?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
-<p>淘宝提供的请求示例如下图所示（<a target="_blank" rel="noopener" href="https://open.taobao.com/api.htm?docId=24527&docType=2">官方文档</a>）：<br><img data-src="https://img-blog.csdn.net/20180727224754167?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>淘宝提供的请求示例如下图所示（<a target="_blank" rel="noopener" href="https://open.taobao.com/api.htm?docId=24527&amp;docType=2">官方文档</a>）：<br><img data-src="https://img-blog.csdn.net/20180727224754167?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
 <p>响应式例：</p>
 <p><img data-src="https://img-blog.csdn.net/20180727224933562?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
 <p>以订单创建时间为准，每天获取前一天的数据，参数start_time设置每次请求的时间（取每分钟请求一次），setSpan设置每次查询时长（设置为60秒），因此要获取一天的数据就调用1440次。很容易能跑通该示例，最终结果形式为：<br><img data-src="https://img-blog.csdn.net/20180727230053769?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
@@ -415,14 +418,12 @@ daovoice('update');
 <p>最后在终端切换到maven项目根目录，执行命令：<strong>mvn clean package -Dmaven.test.skip=true -Dcheckstyle.skip=true</strong>，会在<br>即可在target目录下生成所需的jar包（名字中不带original的）。</p>
 <p>坑四：一开始在常用的开发机上跑，但是貌似不能访问外网，因此一直访问gw.api.taobao.com/router/rest出错，后来换了一台线上开发机，成功跑通了。。</p>
 <h3 id="编写shell脚本"><a href="#编写shell脚本" class="headerlink" title="编写shell脚本"></a>编写shell脚本</h3><p>在开发机生成订单数据对应的csv后，编写shell脚本将其load到hive表中，方便后续的分析使用。因为是明细数据，因此建成fact表。</p>
-<p>创建分区表：<br>CREATE  TABLE ks_ad.dw_fact_commiosity_detail_di(id int,name string) partitioned by (dt STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘,‘ LINES TERMINATED BY ‘\n’STORED AS TEXTFILE;</p>
+<p>创建分区表：<br>CREATE  TABLE ks_ad.dw_fact_commiosity_detail_di(id int,name string) partitioned by (dt STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘\,’ LINES TERMINATED BY ‘\n’STORED AS TEXTFILE;</p>
 <p>插入数据：<br>load data local inpath ‘owwo/xxx.csv’ into table xxx PARTITION (partcol1=val1, partcol2=val2 …)</p>
 <h3 id="编写crontab命令"><a href="#编写crontab命令" class="headerlink" title="编写crontab命令"></a>编写crontab命令</h3><p>编写好shell脚本后，因为我们想要它每天定时执行，例如每天早上6点，这是就需要crontab命令，执行crontab -e添加用户调度任务。</p>
 <p><strong>crontab文件的含义：用户所建立的crontab文件中，每一行都代表一项任务，每行的每个字段代表一项设置，它的格式共分为六个字段，前五段是时间设定段，第六段是要执行的命令段，格式如下：</strong></p>
 <figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">minute</span>   <span class="built_in">hour</span>   <span class="built_in">day</span>   <span class="built_in">month</span>   week   command     顺序：分 时 日 月 周 任务</span><br></pre></td></tr></table></figure>
-<p>本项目设置的是每天早上6段执行，如下所示：</p>
-<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">00 </span><span class="number">06</span> * * * xx/taobao.sh &gt;&gt; yy.<span class="keyword">log</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>上面命令后半段是将成的标准输出添加到log文件中，方便查看报错。</p>
+<p>本项目设置的是每天早上6段执行，如下所示：<br><figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">00 </span><span class="number">06</span> * * * xx/taobao.sh &gt;&gt; yy.<span class="keyword">log</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure><br>上面命令后半段是将成的标准输出添加到log文件中，方便查看报错。</p>
 <p>其中&amp; 1 ，表示文件描述符 1指标准输出stdout。<br>对于2，表示标准错误，stderr。<br><strong>2&gt;&amp;1 的意思就是将标准错误重定向到标准输出，而标准输出已经重定向到了yy.log中，因此最终都会在log中显示。</strong></p>
 <p><strong>这里还有个坑：</strong></p>
 <ul>

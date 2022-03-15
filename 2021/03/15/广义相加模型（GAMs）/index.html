@@ -43,12 +43,12 @@ daovoice('update');
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":240,"display":"hide","padding":18,"offset":20},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":"ture","trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。">
+<meta name="description" content="本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。 概念">
 <meta property="og:type" content="article">
 <meta property="og:title" content="广义相加模型（GAMs）">
 <meta property="og:url" content="http://example.com/2021/03/15/%E5%B9%BF%E4%B9%89%E7%9B%B8%E5%8A%A0%E6%A8%A1%E5%9E%8B%EF%BC%88GAMs%EF%BC%89/index.html">
 <meta property="og:site_name" content="Casterliu">
-<meta property="og:description" content="本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。">
+<meta property="og:description" content="本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。 概念">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158075682624.jpg">
 <meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158735097296.jpg">
@@ -121,7 +121,11 @@ daovoice('update');
   </style>
 </noscript>
 
-</head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
@@ -383,8 +387,7 @@ daovoice('update');
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。</p>
-<span id="more"></span>
+        <p>本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。<br><span id="more"></span></p>
 <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>在现实生活中，变量的作用通常不是线性的，线性假设很可能不能满足实际需求，甚至直接违背实际情况，GAM是一种在线性的框架内，构造非线性的响应模型的方法。</p>
 <h2 id="GAM模型形式"><a href="#GAM模型形式" class="headerlink" title="GAM模型形式"></a>GAM模型形式</h2><p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158075682624.jpg" alt="-w457"><br>其中函数<strong>f</strong>可以是线性项、多项式项、样条函数或核函数。</p>
 <h3 id="样条函数"><a href="#样条函数" class="headerlink" title="样条函数"></a>样条函数</h3><p>简单线性回归和多项式回归的拟合都是全局性的，使用相同的方程预测自变量的每一个值所对应的因变量。然而实际中随着自变量取值的变化，其与因变量之间的关系也可能是在不断变化的。</p>
@@ -405,16 +408,16 @@ daovoice('update');
 </ul>
 <p>常见样条函数：</p>
 <ul>
-<li>三次样条函数：具有连续性、且一阶和二阶导连续的三阶分段多项式<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158752032767.jpg"></li>
+<li>三次样条函数：具有连续性、且一阶和二阶导连续的三阶分段多项式<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158752032767.jpg" alt=""></li>
 <li>薄板样条函数：可同时平滑多个变量，因此一般在研究多个变量的交互作用时使用</li>
 </ul>
-<h4 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h4><p>假设我们样条函数为g(x),再求得该函数参数的同时，如何保证样条曲线的平滑性呢？<br>添加对平滑性的惩罚项<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158760751925.jpg"><br>上式中的惩罚项表示为对区间t内，一阶导数*g′(t)*累计的变化情况，因此可以用来衡量该段区间整体的平滑性。<br>整体拟合函数项为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158761324407.jpg"></p>
-<h5 id="backfitting方法"><a href="#backfitting方法" class="headerlink" title="backfitting方法"></a>backfitting方法</h5><p>使用backfitting（回修）方法求解整体拟合函数，方法流程为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158780340453.jpg"></p>
+<h4 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h4><p>假设我们样条函数为g(x),再求得该函数参数的同时，如何保证样条曲线的平滑性呢？<br>添加对平滑性的惩罚项<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158760751925.jpg" alt=""><br>上式中的惩罚项表示为对区间t内，一阶导数<em>g′(t)</em>累计的变化情况，因此可以用来衡量该段区间整体的平滑性。<br>整体拟合函数项为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158761324407.jpg" alt=""></p>
+<h5 id="backfitting方法"><a href="#backfitting方法" class="headerlink" title="backfitting方法"></a>backfitting方法</h5><p>使用backfitting（回修）方法求解整体拟合函数，方法流程为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158780340453.jpg" alt=""></p>
 <h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ol>
 <li>可以引入非线性函数;</li>
 <li>非线性可能使得对预测的更准确;</li>
 <li>因为是”加性的”，所以，线性模型的假设检验的方法仍然可以使用;</li>
-<li>因为是“加性”假设，所以GAMs中可能会缺失重要的交互作用，只能通过手动添加交互项来弥补，如下所示：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158769920356.jpg"><br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158770656414.jpg"></li>
+<li>因为是“加性”假设，所以GAMs中可能会缺失重要的交互作用，只能通过手动添加交互项来弥补，如下所示：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158769920356.jpg" alt=""><br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158770656414.jpg" alt=""></li>
 </ol>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>可加模型提供一个有用的线性模型拓展，使得不仅保留着大部分的可解释性，也更加灵活；</p>
 
