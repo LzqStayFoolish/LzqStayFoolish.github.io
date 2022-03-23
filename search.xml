@@ -1,107 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>淘宝API总结</title>
-    <url>/2021/03/12/%E6%B7%98%E5%AE%9DAPI%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<p>最近负责的项目，需要对接淘宝提供的 <a href="https://open.taobao.com/api.htm?docId=24527&amp;docType=2%20%E6%B7%98%E5%AE%9Dapi">淘宝api</a>，获取淘宝客的订单数据。在此过程中遇到了很多坑，特在此mark一下，可能对于一些大佬来说很简单，如果发现有错误欢迎指出。所有过程如下所示：<br><span id="more"></span></p>
-<ol>
-<li>基于Intellij IDEA 创建Maven项目</li>
-<li>将淘宝API依赖的jar包安装到本地maven仓库</li>
-<li>根据公开的请求实例编写java脚本，获取返回的订单数据（Jason格式）</li>
-<li>以javabean的形式解析json，并写到本地csv文件中</li>
-<li>通过Maven将项目达成jar包，上传到开发机上。</li>
-<li>编写shell脚本：执行jar包，并将生成的csv文件load到hive表中(作为fact层的明细数据)</li>
-<li>通过crontab命令，后台定期执行shell脚本。</li>
-<li>将订单数据与跳转数据关联，得到跳转pv/uv、转化率等指标。</li>
-</ol>
-<p>下面针对每一步进行介绍，并说明遇到的坑</p>
-<h3 id="创建Maven项目"><a href="#创建Maven项目" class="headerlink" title="创建Maven项目"></a>创建Maven项目</h3><p>鉴于maven的依赖管理优势，先利用Intellij IDEA 创建maven项目。<br><img data-src="https://img-blog.csdn.net/20180727221353621?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img data-src="https://img-blog.csdn.net/20180727221407423?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img data-src="https://img-blog.csdn.net/20180727221426518?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
-<h3 id="安装jar包到本地仓库"><a href="#安装jar包到本地仓库" class="headerlink" title="安装jar包到本地仓库"></a>安装jar包到本地仓库</h3><p>因为本项目依赖淘宝api的jar包，需要下载相应的sdk，其中<strong>提供了API的请求封装、摘要签名、响应解释、消息监听等功能，使用SDK可以轻松完成API的调用，API结果的获取，消息的实时监听</strong>。</p>
-<p>这里遇到了<strong>第一个坑</strong>：一开始考虑到python对jason的解析更方便（本人对python也更熟悉。。），想使用python写，但是调api时需要提供port，然而没拿到，最后还是使用了java。</p>
-<p>使用淘宝api的<strong>步骤：</strong>（<a href="https://open.taobao.com/doc.htm?docId=103232&amp;docType=1">官方文档介绍</a>）</p>
-<ul>
-<li>你需要先创建相应的应用，获取App Key和App Secret。</li>
-<li>根据你的脚本语言，下载对应的jdk，包括java、python、.net等可供选择。</li>
-<li>获取jdk后，将其安装到本地maven仓库中（~/.m2/repository/）,<strong>安装命令为</strong>：mvn install:install-file -Dfile=jar包的位置(参数一) -DgroupId=groupId(参数二) -DartifactId=artifactId(参数三) -Dversion=version(参数四) -Dpackaging=jar</li>
+    <title>商业分析方法与模型</title>
+    <url>/2021/12/22/%E5%B9%BF%E4%B9%89%E7%9B%B8%E5%8A%A0%E6%A8%A1%E5%9E%8B%EF%BC%88GAMs%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="提升用户转化（付费）"><a href="#提升用户转化（付费）" class="headerlink" title="提升用户转化（付费）"></a>提升用户转化（付费）</h2><center>![-w300](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400876481662.jpg)
+</center>
+提高电商平台的订单转化率，我们需要从三个方面入手：商品分析、用户分析和归因分析。
+### 1. 商品分析
+##### 1.1 转化路径分析
+电商购买流程的主路径为：
+<center>![-w550](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400722835686.jpg)
+</center>
+针对关键路径转化“UV-点击”、“点击-加入购物车”、“购物车-支付成功”，不同商品的转化率进行比较分析，监测SKU的更新变化。
+
+##### 1.2 商品分类分析
+根据商品品类的转化率，利用**波士顿矩阵**将商品品类分成以下4种。
+- 导流型品类：利润非常低，但是购买量大、市场需求大，目的在于导流。
+- 高利润型品类：利润率高，希望用户更多购买此类商品。
+- 高转化品类：带量。
+- 未来明星型品类：这是电商平台的潜力股，虽然曝光量很低，但是转化率极高。
+![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400730073528.jpg)
+
+上图的**波士顿矩阵**，横坐标代表商品的曝光量，纵坐标是商品的转化率，图中的每一个圆圈代表一个品类的商品。右上角的商品品类曝光量大、转化率高，是现金流的重要业务；而左上角的商品虽然曝光率非常低，但是转化率极高，属于我们上面提到的未来明星型品类，对于这一类商品，我们在后期的运营中可以增加其曝光量。
+##### V1版
+依据波士顿矩阵，从曝光量 -> 转化率 -> 回购率三个方向对商品进行划分，将商品分为八类。
+定义：
+- 曝光量：两周内商品的曝光次数
+- 转化率：两周内商品的订单转化次数/点击次数
+- 回购率：两周内转化的商品在未来一周内产生复购的量/两周内的转化量
+<center>![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16413507381583.jpg)</center>
+商品划分后，可拆分如下商品转化路径，不同转化都存在对应策略。
+<center>![](/media/2022-01-05 /16413654649297.jpg)
+</center>
+
+<h3 id="2-用户分析-精准营销"><a href="#2-用户分析-精准营销" class="headerlink" title="2. 用户分析-精准营销"></a>2. 用户分析-精准营销</h3><p>通过用户全生命周期精准营销和精细化运营，提升用户增长的北极星目标，其场景和流程如下图所示：</p>
+<center>![-w400](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400859137520.jpg)![-w200](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400861978019.jpg)
+</center>
+#### 2.1 Lookalike算法
+Lookalike的目的是基于目标人群，从海量的人群中找出和目标人群相似的其他人群，分为显示定位和隐式定位。
+<center>![-w400](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400892966347.jpg)
+</center>
+##### 2.1.1 显式定位：根据用户画像标签筛选
+建立用户画像体系，对人群进行细分并添加标签，电商平台画像可从用户特征，商品特征和渠道特征三个方向建立：
+<center>![-w400](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400776561536.jpg)
+</center>
+##### 2.1.1.1 用户特征
+<center>
+![-w400](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400777169960.jpg)
+</center>
+##### 2.1.1.2 商品特征
+<center>
+![-w500](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400777943530.jpg)
+</center>
+##### 2.1.1.3 渠道特征
+<center>![-w400](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400778298866.jpg)
+</center>
+##### 2.1.2 隐式定位
+通过机器学习、深度学习的方法，对种子用户进行建模，然后用模型去识别。
+##### 2.1.2.1 基于相似度模型
+基于User-User之间的某种距离大小来衡量用户之间的相似度。
+<center>![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400794661930.jpg)
+</center>
+计算完个体之间的距离后，再计算个体和样本的距离，来确定个体属于哪个种子用户
+##### 2.1.2.2 基于分类模型
+将look-alike看成是分类问题，很多的分类算法都可适用，例如LR算法，XGB模型和RF模型等。
+###### LR算法
+将种子用户作为正例，将随机用户进行降采样后作为负例，为每个种子训练一个LR模型。用这个模型在全部用户上预测，后去判断其他的用户是否为目标人群，模型如下：
+<center>![-w158](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400801561296.jpg)
+</center>
+#### 2.2 uplift模型
+通过uplift定位产品策略的受益人群，针对persuadable人群进行下发，保证营销效用最大化。
+<center>![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400881260538.jpg)
+</center>
+
+<h4 id="2-3-个性化推荐-千人千面"><a href="#2-3-个性化推荐-千人千面" class="headerlink" title="2.3 个性化推荐-千人千面"></a>2.3 个性化推荐-千人千面</h4><p>“千人千面”是指结合依靠电商平台庞大的数据库，从细分类目中抓取那些特征与买家兴趣点匹配的推广宝贝，为展现在目标客户浏览的网页上，帮助您锁定潜在买家，实现精准营销。</p>
+<p>依托用户画像，每个消费者只要有在电商平台上购买或是浏览过，就会给用户打上标签，比如年龄、喜好、关注点等。标签的不同，千人千面展示下看到的产品就会有所差别。就像两个男生从来没有买过女性产品，但是第一次给女性买东西，搜索同一个关键词比如连衣裙 女，那么看到的也不一样，平台会根据你以往的一些购买行为打上标签，比如是年轻，高客单的，那么展示在你面前的连衣裙也会投放与这些标签相似度比较高的产品，这就是千人千面深入一步的展示。</p>
+<h5 id="2-3-1-协同过滤"><a href="#2-3-1-协同过滤" class="headerlink" title="2.3.1 协同过滤"></a>2.3.1 协同过滤</h5><ul>
+<li>基本思想：我们想给用户推荐东西，最合乎逻辑方法是找到具有相似兴趣的人，分析他们的行为，并向用户推荐相同的项目。另一种方法是看看用于以前买的商品，然后给他们推荐相似的。</li>
+<li>包括<strong>基于用户的协同过滤</strong>（下图左）和<strong>基于项目的协同过滤</strong>（下图右）。<center>![-w500](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401581131136.jpg)</center>
+
+</li>
 </ul>
-<p>安装完后，仓库和pom文件如下图所示：<br><img data-src="https://img-blog.csdn.net/20180727223452915?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><img data-src="https://img-blog.csdn.net/20180727223504931?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><strong>maven在本地仓库中查找jar包是按照：groupId目录 到 artifactId目录 再到version目录的顺序查找。</strong></p>
-<h3 id="编写java请求脚本"><a href="#编写java请求脚本" class="headerlink" title="编写java请求脚本"></a>编写java请求脚本</h3><p>用java编写，因为后面要解析json，因此需要在pom文件中添加如下依赖：<br><img data-src="https://img-blog.csdn.net/2018072722411946?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
-<p>淘宝提供的请求示例如下图所示（<a href="https://open.taobao.com/api.htm?docId=24527&amp;docType=2">官方文档</a>）：<br><img data-src="https://img-blog.csdn.net/20180727224754167?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
-<p>响应式例：</p>
-<p><img data-src="https://img-blog.csdn.net/20180727224933562?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
-<p>以订单创建时间为准，每天获取前一天的数据，参数start_time设置每次请求的时间（取每分钟请求一次），setSpan设置每次查询时长（设置为60秒），因此要获取一天的数据就调用1440次。很容易能跑通该示例，最终结果形式为：<br><img data-src="https://img-blog.csdn.net/20180727230053769?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
-<h3 id="解析json"><a href="#解析json" class="headerlink" title="解析json"></a>解析json</h3><p>解析json采用java bean的方式，将json转换成java对象，这里遇到<strong>第二个大坑：</strong>因为返回的json包含三层，因此一开始写了四个java实体类，但是可能对应关系没弄好，一直报错，太菜又一直没找到原因（心态有点小崩），最后在大神导师的指点下，直接用原生解析的方式获取最内层(n_tbk_order对应的json数组)，然后再转换成java对象，只需要一个bean文件（见下图）就行。灵活变通还是很重要的啊！！<br><img data-src="https://img-blog.csdn.net/20180727230954491?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
-<p>这里还有<strong>第三个坑</strong>：一开始大致观察数据（json字符串很长），以为返回的json数组中只包含一条订单数据，后来发现数据对不上，因此后来对数组遍历，果然发现数据`·量增加了，写代码<strong>逻辑一定要严谨啊！！</strong></p>
-<h3 id="生成jar包"><a href="#生成jar包" class="headerlink" title="生成jar包"></a>生成jar包</h3><p>因为最终脚本要放在线上开发机上跑，因此需要打成jar包。一开使用Intellij IDEA 自带的project structure，但后来在开发机上一直报错，后来尝试使用maven插件，在pom文件中添加下列代码：<br><img data-src="https://img-blog.csdn.net/20180728164207489?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><strong>注意：记得修改mainClass的值，路径为：主程序包名.main程序名</strong><br><img data-src="https://img-blog.csdn.net/20180728164548166?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x6cTIwMTE1Mzk1/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
-<p>最后在终端切换到maven项目根目录，执行命令：<strong>mvn clean package -Dmaven.test.skip=true -Dcheckstyle.skip=true</strong>，会在<br>即可在target目录下生成所需的jar包（名字中不带original的）。</p>
-<p>坑四：一开始在常用的开发机上跑，但是貌似不能访问外网，因此一直访问gw.api.taobao.com/router/rest出错，后来换了一台线上开发机，成功跑通了。。</p>
-<h3 id="编写shell脚本"><a href="#编写shell脚本" class="headerlink" title="编写shell脚本"></a>编写shell脚本</h3><p>在开发机生成订单数据对应的csv后，编写shell脚本将其load到hive表中，方便后续的分析使用。因为是明细数据，因此建成fact表。</p>
-<p>创建分区表：<br>CREATE  TABLE ks_ad.dw_fact_commiosity_detail_di(id int,name string) partitioned by (dt STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘\,’ LINES TERMINATED BY ‘\n’STORED AS TEXTFILE;</p>
-<p>插入数据：<br>load data local inpath ‘owwo/xxx.csv’ into table xxx PARTITION (partcol1=val1, partcol2=val2 …)</p>
-<h3 id="编写crontab命令"><a href="#编写crontab命令" class="headerlink" title="编写crontab命令"></a>编写crontab命令</h3><p>编写好shell脚本后，因为我们想要它每天定时执行，例如每天早上6点，这是就需要crontab命令，执行crontab -e添加用户调度任务。</p>
-<p><strong>crontab文件的含义：用户所建立的crontab文件中，每一行都代表一项任务，每行的每个字段代表一项设置，它的格式共分为六个字段，前五段是时间设定段，第六段是要执行的命令段，格式如下：</strong></p>
-<figure class="highlight excel"><table><tr><td class="code"><pre><span class="line"><span class="built_in">minute</span>   <span class="built_in">hour</span>   <span class="built_in">day</span>   <span class="built_in">month</span>   week   command     顺序：分 时 日 月 周 任务</span><br></pre></td></tr></table></figure>
-<p>本项目设置的是每天早上6段执行，如下所示：<br><figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">00 </span><span class="number">06</span> * * * xx/taobao.sh &gt;&gt; yy.<span class="keyword">log</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure><br>上面命令后半段是将成的标准输出添加到log文件中，方便查看报错。</p>
-<p>其中&amp; 1 ，表示文件描述符 1指标准输出stdout。<br>对于2，表示标准错误，stderr。<br><strong>2&gt;&amp;1 的意思就是将标准错误重定向到标准输出，而标准输出已经重定向到了yy.log中，因此最终都会在log中显示。</strong></p>
-<p><strong>这里还有个坑：</strong></p>
-<ul>
-<li>使用contrab时默认以contrab用户的身份执行shell文件，因此首先需要用chmod命令改变jar包和shell脚本的权限，暴力点可以直接chmod 777 xx.sh</li>
-<li>另外，crontab默认将生成的csv文件保存在根目录/home下，因此在jar包中要注意输出csv的路径，否则后面load数据会找不到csv文件。<h3 id="关联跳转数据"><a href="#关联跳转数据" class="headerlink" title="关联跳转数据"></a>关联跳转数据</h3>完成上面的步骤后，在hive中就可以得到我们所需的订单数据表了。后面根据业务需求，与其他进行数据进行关联分析。</li>
+<h5 id="V1"><a href="#V1" class="headerlink" title="V1"></a>V1</h5><p>使用基于项目的协同过滤，构建商品之间的相似度库，</p>
+<h5 id="2-3-2-矩阵分解"><a href="#2-3-2-矩阵分解" class="headerlink" title="2.3.2 矩阵分解"></a>2.3.2 矩阵分解</h5><ul>
+<li>基本思想：矩阵分解，直观上来说就是把原来的大矩阵，近似分解成两个小矩阵的乘积，在实际推荐计算时不再使用大矩阵，而是使用分解得到的两个小矩阵。<center>![-w500](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401583577701.jpg)</center></li>
+<li>优点：1.比较容易编程实现，随机梯度下降方法依次迭代即可训练出模型。比较低的时间和空间复杂度，高维矩阵映射为两个低维矩阵节省了存储空间，训练过程比较费时，但是可以离线完成；2.预测的精度比较高，预测准确率要高于协同过滤以及内容过滤等方法。3. 扩展性好。</li>
+<li>缺点：1.模型训练比较费时；2.推荐结果不具有很好的可解释性，分解出来的用户和物品矩阵的每个维度无法和现实生活中的概念来解释，无法用现实概念给每个维度命名，只能理解为潜在语义空间。</li>
 </ul>
-<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>虽然这只是一个小需求，但是种种bug还是让人很头疼。当然最开心的是，在解决的过程中自己学到了很多东西。非常感谢我的mentor，他的耐心解答为我提供了非常大的帮助。</p>
+<h3 id="3-归因分析"><a href="#3-归因分析" class="headerlink" title="3. 归因分析"></a>3. 归因分析</h3><p>电商坑位归因的概念，把每一笔的成交都归给转化路径中不同的坑位。根据坑位的曝光转化价值来评判坑位的好与坏。把宝贵的流量尽可能都引导到转化率更高的坑位，以此达到精细化运营的效果。归因模型包括以下几种：</p>
+<h4 id="3-1-首次触点模型"><a href="#3-1-首次触点模型" class="headerlink" title="3.1 首次触点模型"></a>3.1 首次触点模型</h4><ul>
+<li>定义：多个「待归因事件」对同一个「目标转化事件」作出贡献时，认为第一个「待归因事件」功劳为 100%。</li>
+<li>优点：是一种容易实施的单触点模型</li>
+<li>弊端：受限于数据跟踪周期，对于用户路径长、周期长的用户行为可能无法采集真正的首次互动。</li>
+<li>适用于：这种模型适用于没什么品牌知名度的公司，关注能给他们带来客户的最初的渠道，对于扩展市场很有帮助的渠道。</li>
+</ul>
+<h4 id="3-2-末次触点归因"><a href="#3-2-末次触点归因" class="headerlink" title="3.2 末次触点归因"></a>3.2 末次触点归因</h4><ul>
+<li>定义：多个「待归因事件」对同一个「目标转化事件」作出贡献时，认为最后一个「待归因事件」功劳为 100%。</li>
+<li>优点：首先它是最容易测量的归因模型，在分析计方面不容易发生错误。</li>
+<li>弊端：末次渠道的功劳评估会被大幅高估，真实的用户行为路径更接近于产生兴趣、信任、购买意向、信息对比等各种环节，这些都是其他渠道的功劳，在这个模型中则无法统计进来。</li>
+<li>适用于：转化路径少、周期短的业务，或者就是起临门一脚作用的广告，为了吸引客户购买，点击直接落地到商品详情页</li>
+</ul>
+<center>![-w200](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401563988827.jpg)
+</center>
+
+<h4 id="3-3-线性归因"><a href="#3-3-线性归因" class="headerlink" title="3.3 线性归因"></a>3.3 线性归因</h4><ul>
+<li>定义：多个「待归因事件」对同一个「目标转化事件」作出贡献时，认为每个「待归因事件」平均分配此次功劳。</li>
+<li>优点：他是一个多触点归因模型，可以将功劳划分给转化漏斗中每个不同阶段的营销渠道。另外，他的计算方法比较简单，计算过程中的价值系数调整也比较方便。</li>
+<li>弊端：很明显，线性平均划分的方法不适用于某些渠道价值特别突出的业务。</li>
+<li>适用于：适用于企业期望在整个销售周期内保持与客户的联系，并维持品牌认知度的公司。在这种情况下，各个渠道在客户的考虑过程中，都起到相同的促进作用。</li>
+</ul>
+<center>![-w200](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401564341245.jpg)</center>
+
+<h4 id="3-4-时间衰减归因"><a href="#3-4-时间衰减归因" class="headerlink" title="3.4 时间衰减归因"></a>3.4 时间衰减归因</h4><ul>
+<li>定义：多个「待归因事件」对同一个「目标转化事件」作出贡献时，认为越靠近「目标转化事件」做出的贡献越大。</li>
+<li>优点：相比线性归因模型的平均分权重的方式，时间衰减模型让不同渠道得到了不同的权重分配，当然前提是基于“触点离转化越近，对转化影响力就越大”的前提是准确的情况下，这种模型是相对较合理的。</li>
+<li>弊端：这种假设的问题就是，在漏洞顶部的营销渠道永远不会得到一个公平的分数，因为它们总是距离转化最远的那个。</li>
+<li>适用于：客户决策周期短、销售周期短的情况。比如，做短期的促销，就打了两天的广告，那么这两天的广告理应获得较高的权重。</li>
+</ul>
+<center>![-w200](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401563062233.jpg)</center>
+
+<h4 id="3-5-位置归因"><a href="#3-5-位置归因" class="headerlink" title="3.5 位置归因"></a>3.5 位置归因</h4><ul>
+<li>定义：多个「待归因事件」对同一个「目标转化事件」作出贡献时，认为第一个和最后一个「待归因事件」各占 40% 功劳，其余「待归因事件」平分剩余的 20% 功劳。</li>
+<li>混合使用了首次互动归因和末次互动归因.</li>
+<li>适合:十分重视线索来源和促成销售渠道的公司<center>![-w200](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401565413171.jpg)</center>
+
+</li>
+</ul>
+<h4 id="3-6-马尔科夫链"><a href="#3-6-马尔科夫链" class="headerlink" title="3.6 马尔科夫链"></a>3.6 马尔科夫链</h4><ul>
+<li>马尔科夫链(Markov Chain)，描述了一种状态序列，其每个状态值取决于前面有限个状态，马尔科夫链是具有马尔科夫性质的随机变量的一个数列。</li>
+<li>马尔科夫链归因模型实质上是一种以数据驱动的(Data-Driven)、更准确的归因算法。访客下一次访问某个渠道的概率，取决于这次访问的渠道</li>
+<li>马尔科夫链归因模型适用于渠道多、数量大、有建模分析能力的公司。</li>
+</ul>
+<p>总的来说，<strong>没有完美的归因模型</strong>。任何模型都存在他的局限性和不足，如何有效地结合客观数据与主观推测，是用好归因模型的重要能力前提。</p>
+<h4 id="V1-1"><a href="#V1-1" class="headerlink" title="V1"></a>V1</h4><h5 id="波士顿矩阵"><a href="#波士顿矩阵" class="headerlink" title="波士顿矩阵"></a>波士顿矩阵</h5><p>从曝光量 -&gt; 转化率 -&gt; 回购率三个方向对商品进行划分，将商品分为八类。<br>定义：</p>
+<ul>
+<li>曝光量：两周内商品的曝光次数</li>
+<li>转化率：两周内商品的订单转化次数/点击次数</li>
+<li>回购率：两周内转化的商品在未来一周内产生复购的量/两周内的转化量<center>![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16413507381583.jpg)
+</center>
+商品划分后，可拆分如下商品转化路径，不同转化都存在对应策略。
+<center>![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16414434541159.jpg)
+</center>
+
+</li>
+</ul>
+<h5 id="基于项目的协同过滤"><a href="#基于项目的协同过滤" class="headerlink" title="基于项目的协同过滤"></a>基于项目的协同过滤</h5><p>1.收集用户购买信息，构建user-item矩阵<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16413688335077.jpg" alt=""><br>2.针对项目的最近邻搜索<br>先计算已评价项目和待预测项目的相似度，并以相似度作为权重，加权各已评价项目的分数，得到待预测项目的预测值。例如：要对项目 A 和项目 B 进行相似性计算，要先找出同时对 A 和 B 打过分的组合，对这些组合进行相似度计算。<br>3.产生推荐结果<br>以项目为基础的协同过滤不用考虑用户间的差别，所以精度比较差。但是却不需要用户的历史数据，或是进行用户识别。对于项目来讲，它们之间的相似性要稳定很多，因此可以离线完成工作量最大的相似性计算步骤，从而降低了在线计算量，提高推荐效率，尤其是在用户多于项目的情形下尤为显著ds</p>
+<h5 id="转化路径"><a href="#转化路径" class="headerlink" title="转化路径"></a>转化路径</h5><p><center>![-w550](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400722835686.jpg)
+</center><br>不同商品生成转化路径分析，找出影响最终支付完成的转折点。</p>
 ]]></content>
-      <categories>
-        <category>项目总结</category>
-      </categories>
       <tags>
-        <tag>淘宝api</tag>
-        <tag>大数据</tag>
-        <tag>数据仓库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>广义相加模型（GAMs）</title>
-    <url>/2021/03/15/%E5%B9%BF%E4%B9%89%E7%9B%B8%E5%8A%A0%E6%A8%A1%E5%9E%8B%EF%BC%88GAMs%EF%BC%89/</url>
-    <content><![CDATA[<p>本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。<br><span id="more"></span></p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>在现实生活中，变量的作用通常不是线性的，线性假设很可能不能满足实际需求，甚至直接违背实际情况，GAM是一种在线性的框架内，构造非线性的响应模型的方法。</p>
-<h2 id="GAM模型形式"><a href="#GAM模型形式" class="headerlink" title="GAM模型形式"></a>GAM模型形式</h2><p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158075682624.jpg" alt="-w457"><br>其中函数<strong>f</strong>可以是线性项、多项式项、样条函数或核函数。</p>
-<h3 id="样条函数"><a href="#样条函数" class="headerlink" title="样条函数"></a>样条函数</h3><p>简单线性回归和多项式回归的拟合都是全局性的，使用相同的方程预测自变量的每一个值所对应的因变量。然而实际中随着自变量取值的变化，其与因变量之间的关系也可能是在不断变化的。</p>
-<p>样条函数就是把自变量划分成多个连续的区间，每一个区间都用单独的线性函数或非线性的低阶多项式函数来拟合得到的函数。</p>
-<h4 id="节点数量的选取"><a href="#节点数量的选取" class="headerlink" title="节点数量的选取"></a>节点数量的选取</h4><p>可以使用广义交叉验证选择节点数。这种方法的基本思路是：</p>
-<ol>
-<li>取出一部分数据</li>
-<li>用某一数量的节点使样条拟合剩下的这些数据</li>
-<li>用样条拟合之前取出的数据</li>
-<li>重复步骤1-3，直到每个观察值都被取出过一次，计算整个交叉验证过程的均方根误差RMSE</li>
-<li>针对不同数量的节点重复1-4，最后选择最小RMSE时的节点数量</li>
-</ol>
-<h4 id="节点的位置"><a href="#节点的位置" class="headerlink" title="节点的位置"></a>节点的位置</h4><p>在数据变化复杂的地方多设置节点，在看起来更稳定的地方少设置节点。比如研究大气污染的健康效应时，在暴露反应关系可能存在拐点的地方设置节点。实际中，一般会截取长度相同的区间设置节点。</p>
-<h4 id="每个区间该如何确定拟合函数"><a href="#每个区间该如何确定拟合函数" class="headerlink" title="每个区间该如何确定拟合函数"></a>每个区间该如何确定拟合函数</h4><p>理论上可以用任意低阶多项式拟合某个单独区间，最终得到的模型就是分段多项式。但分段多项式不能随便设定，它有两个限制条件：</p>
-<ul>
-<li>连续性：多项式在节点处应该是连续的；<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158735097296.jpg" alt="-w247"></li>
-<li>平滑性：相邻多项式的导数必须相同(如果拟合的是m阶多项式，则应保证相邻多项式的一阶导数至m-1阶导数均相等)；<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158735526489.jpg" alt="-w257"></li>
-</ul>
-<p>常见样条函数：</p>
-<ul>
-<li>三次样条函数：具有连续性、且一阶和二阶导连续的三阶分段多项式<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158752032767.jpg" alt=""></li>
-<li>薄板样条函数：可同时平滑多个变量，因此一般在研究多个变量的交互作用时使用</li>
-</ul>
-<h4 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h4><p>假设我们样条函数为g(x),再求得该函数参数的同时，如何保证样条曲线的平滑性呢？<br>添加对平滑性的惩罚项<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158760751925.jpg" alt=""><br>上式中的惩罚项表示为对区间t内，一阶导数<em>g′(t)</em>累计的变化情况，因此可以用来衡量该段区间整体的平滑性。<br>整体拟合函数项为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158761324407.jpg" alt=""></p>
-<h5 id="backfitting方法"><a href="#backfitting方法" class="headerlink" title="backfitting方法"></a>backfitting方法</h5><p>使用backfitting（回修）方法求解整体拟合函数，方法流程为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158780340453.jpg" alt=""></p>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ol>
-<li>可以引入非线性函数;</li>
-<li>非线性可能使得对预测的更准确;</li>
-<li>因为是”加性的”，所以，线性模型的假设检验的方法仍然可以使用;</li>
-<li>因为是“加性”假设，所以GAMs中可能会缺失重要的交互作用，只能通过手动添加交互项来弥补，如下所示：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158769920356.jpg" alt=""><br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158770656414.jpg" alt=""></li>
-</ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>可加模型提供一个有用的线性模型拓展，使得不仅保留着大部分的可解释性，也更加灵活；</p>
-]]></content>
-      <categories>
-        <category>技术文章</category>
-      </categories>
-      <tags>
-        <tag>广义相加模型</tag>
-        <tag>统计学</tag>
+        <tag>电商分析方法</tag>
+        <tag>精准营销</tag>
       </tags>
   </entry>
   <entry>
@@ -456,7 +505,7 @@ Lookalike的目的是基于目标人群，从海量的人群中找出和目标�
 <p>拿到实验数据后，首先看的是P值，大于0.05一般认为指标变动不显著，即表示实验组和对照组在统计意义上无差异，相反，则认为实验组和对照组在统计意义上有差异；</p>
 <p>如果存在空转期，则使用双总体不配对的T-test，否则使用配对T-test；最后若p值小于0.05，则认为统计显著。</p>
 <p><center> 
-![-w568](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2022/03/23/16480067942631.jpg)
+![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/16480067942631.jpg)
 </center></p>
 <h4 id="双总体T检验判断实验显著性"><a href="#双总体T检验判断实验显著性" class="headerlink" title="双总体T检验判断实验显著性"></a>双总体T检验判断实验显著性</h4><p>已知某指标（正态总体）在空转期实验组与对照组相对diff服从<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.791ex" xmlns="http://www.w3.org/2000/svg" width="10.252ex" height="2.713ex" role="img" focusable="false" viewBox="0 -849.5 4531.4 1199"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g><g data-mml-node="mrow" transform="translate(1054.7,0)"><g data-mml-node="mo" transform="translate(0 -0.5)"><path data-c="28" d="M152 251Q152 646 388 850H416Q422 844 422 841Q422 837 403 816T357 753T302 649T255 482T236 250Q236 124 255 19T301 -147T356 -251T403 -315T422 -340Q422 -343 416 -349H388Q359 -325 332 -296T271 -213T212 -97T170 56T152 251Z"></path></g><g data-mml-node="msub" transform="translate(458,0)"><g data-mml-node="mi"><path data-c="1D707" d="M58 -216Q44 -216 34 -208T23 -186Q23 -176 96 116T173 414Q186 442 219 442Q231 441 239 435T249 423T251 413Q251 401 220 279T187 142Q185 131 185 107V99Q185 26 252 26Q261 26 270 27T287 31T302 38T315 45T327 55T338 65T348 77T356 88T365 100L372 110L408 253Q444 395 448 404Q461 431 491 431Q504 431 512 424T523 412T525 402L449 84Q448 79 448 68Q448 43 455 35T476 26Q485 27 496 35Q517 55 537 131Q543 151 547 152Q549 153 557 153H561Q580 153 580 144Q580 138 575 117T555 63T523 13Q510 0 491 -8Q483 -10 467 -10Q446 -10 429 -4T402 11T385 29T376 44T374 51L368 45Q362 39 350 30T324 12T288 -4T246 -11Q199 -11 153 12L129 -85Q108 -167 104 -180T92 -202Q76 -216 58 -216Z"></path></g><g data-mml-node="TeXAtom" transform="translate(636,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g><g data-mml-node="mo" transform="translate(1497.6,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="msubsup" transform="translate(1942.2,0)"><g data-mml-node="mi"><path data-c="1D6FC" d="M34 156Q34 270 120 356T309 442Q379 442 421 402T478 304Q484 275 485 237V208Q534 282 560 374Q564 388 566 390T582 393Q603 393 603 385Q603 376 594 346T558 261T497 161L486 147L487 123Q489 67 495 47T514 26Q528 28 540 37T557 60Q559 67 562 68T577 70Q597 70 597 62Q597 56 591 43Q579 19 556 5T512 -10H505Q438 -10 414 62L411 69L400 61Q390 53 370 41T325 18T267 -2T203 -11Q124 -11 79 39T34 156ZM208 26Q257 26 306 47T379 90L403 112Q401 255 396 290Q382 405 304 405Q235 405 183 332Q156 292 139 224T121 120Q121 71 146 49T208 26Z"></path></g><g data-mml-node="TeXAtom" transform="translate(673,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g><g data-mml-node="TeXAtom" transform="translate(673,-287.9) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g><g data-mml-node="mo" transform="translate(3018.8,0) translate(0 -0.5)"><path data-c="29" d="M305 251Q305 -145 69 -349H56Q43 -349 39 -347T35 -338Q37 -333 60 -307T108 -239T160 -136T204 27T221 250T204 473T160 636T108 740T60 807T35 839Q35 850 50 850H56H69Q197 743 256 566Q305 425 305 251Z"></path></g></g></g></g></svg></mjx-container>，实验期实验组和对照组的相对diff服从<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.791ex" xmlns="http://www.w3.org/2000/svg" width="10.252ex" height="2.713ex" role="img" focusable="false" viewBox="0 -849.5 4531.4 1199"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path></g><g data-mml-node="mrow" transform="translate(1054.7,0)"><g data-mml-node="mo" transform="translate(0 -0.5)"><path data-c="28" d="M152 251Q152 646 388 850H416Q422 844 422 841Q422 837 403 816T357 753T302 649T255 482T236 250Q236 124 255 19T301 -147T356 -251T403 -315T422 -340Q422 -343 416 -349H388Q359 -325 332 -296T271 -213T212 -97T170 56T152 251Z"></path></g><g data-mml-node="msub" transform="translate(458,0)"><g data-mml-node="mi"><path data-c="1D707" d="M58 -216Q44 -216 34 -208T23 -186Q23 -176 96 116T173 414Q186 442 219 442Q231 441 239 435T249 423T251 413Q251 401 220 279T187 142Q185 131 185 107V99Q185 26 252 26Q261 26 270 27T287 31T302 38T315 45T327 55T338 65T348 77T356 88T365 100L372 110L408 253Q444 395 448 404Q461 431 491 431Q504 431 512 424T523 412T525 402L449 84Q448 79 448 68Q448 43 455 35T476 26Q485 27 496 35Q517 55 537 131Q543 151 547 152Q549 153 557 153H561Q580 153 580 144Q580 138 575 117T555 63T523 13Q510 0 491 -8Q483 -10 467 -10Q446 -10 429 -4T402 11T385 29T376 44T374 51L368 45Q362 39 350 30T324 12T288 -4T246 -11Q199 -11 153 12L129 -85Q108 -167 104 -180T92 -202Q76 -216 58 -216Z"></path></g><g data-mml-node="TeXAtom" transform="translate(636,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g></g><g data-mml-node="mo" transform="translate(1497.6,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="msubsup" transform="translate(1942.2,0)"><g data-mml-node="mi"><path data-c="1D6FC" d="M34 156Q34 270 120 356T309 442Q379 442 421 402T478 304Q484 275 485 237V208Q534 282 560 374Q564 388 566 390T582 393Q603 393 603 385Q603 376 594 346T558 261T497 161L486 147L487 123Q489 67 495 47T514 26Q528 28 540 37T557 60Q559 67 562 68T577 70Q597 70 597 62Q597 56 591 43Q579 19 556 5T512 -10H505Q438 -10 414 62L411 69L400 61Q390 53 370 41T325 18T267 -2T203 -11Q124 -11 79 39T34 156ZM208 26Q257 26 306 47T379 90L403 112Q401 255 396 290Q382 405 304 405Q235 405 183 332Q156 292 139 224T121 120Q121 71 146 49T208 26Z"></path></g><g data-mml-node="TeXAtom" transform="translate(673,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g><g data-mml-node="TeXAtom" transform="translate(673,-287.9) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g></g><g data-mml-node="mo" transform="translate(3018.8,0) translate(0 -0.5)"><path data-c="29" d="M305 251Q305 -145 69 -349H56Q43 -349 39 -347T35 -338Q37 -333 60 -307T108 -239T160 -136T204 27T221 250T204 473T160 636T108 740T60 807T35 839Q35 850 50 850H56H69Q197 743 256 566Q305 425 305 251Z"></path></g></g></g></g></svg></mjx-container>，且两个样本相互独立，默认总体方差相等；<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0" xmlns="http://www.w3.org/2000/svg" width="1.928ex" height="2.262ex" role="img" focusable="false" viewBox="0 -1000 852 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mover"><g data-mml-node="mi"><path data-c="1D44B" d="M42 0H40Q26 0 26 11Q26 15 29 27Q33 41 36 43T55 46Q141 49 190 98Q200 108 306 224T411 342Q302 620 297 625Q288 636 234 637H206Q200 643 200 645T202 664Q206 677 212 683H226Q260 681 347 681Q380 681 408 681T453 682T473 682Q490 682 490 671Q490 670 488 658Q484 643 481 640T465 637Q434 634 411 620L488 426L541 485Q646 598 646 610Q646 628 622 635Q617 635 609 637Q594 637 594 648Q594 650 596 664Q600 677 606 683H618Q619 683 643 683T697 681T738 680Q828 680 837 683H845Q852 676 852 672Q850 647 840 637H824Q790 636 763 628T722 611T698 593L687 584Q687 585 592 480L505 384Q505 383 536 304T601 142T638 56Q648 47 699 46Q734 46 734 37Q734 35 732 23Q728 7 725 4T711 1Q708 1 678 1T589 2Q528 2 496 2T461 1Q444 1 444 10Q444 11 446 25Q448 35 450 39T455 44T464 46T480 47T506 54Q523 62 523 64Q522 64 476 181L429 299Q241 95 236 84Q232 76 232 72Q232 53 261 47Q262 47 267 47T273 46Q276 46 277 46T280 45T283 42T284 35Q284 26 282 19Q279 6 276 4T261 1Q258 1 243 1T201 2T142 2Q64 2 42 0Z"></path></g><g data-mml-node="mo" transform="translate(0,615)"><svg width="852" height="237" x="0" y="148" viewBox="213 148 852 237"><path data-c="2013" d="M0 248V285H499V248H0Z" transform="scale(2.556,1)"></path></svg></g></g></g></g></svg></mjx-container>和<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0" xmlns="http://www.w3.org/2000/svg" width="1.726ex" height="2.262ex" role="img" focusable="false" viewBox="0 -1000 763 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mover"><g data-mml-node="mi"><path data-c="1D44C" d="M66 637Q54 637 49 637T39 638T32 641T30 647T33 664T42 682Q44 683 56 683Q104 680 165 680Q288 680 306 683H316Q322 677 322 674T320 656Q316 643 310 637H298Q242 637 242 624Q242 619 292 477T343 333L346 336Q350 340 358 349T379 373T411 410T454 461Q546 568 561 587T577 618Q577 634 545 637Q528 637 528 647Q528 649 530 661Q533 676 535 679T549 683Q551 683 578 682T657 680Q684 680 713 681T746 682Q763 682 763 673Q763 669 760 657T755 643Q753 637 734 637Q662 632 617 587Q608 578 477 424L348 273L322 169Q295 62 295 57Q295 46 363 46Q379 46 384 45T390 35Q390 33 388 23Q384 6 382 4T366 1Q361 1 324 1T232 2Q170 2 138 2T102 1Q84 1 84 9Q84 14 87 24Q88 27 89 30T90 35T91 39T93 42T96 44T101 45T107 45T116 46T129 46Q168 47 180 50T198 63Q201 68 227 171L252 274L129 623Q128 624 127 625T125 627T122 629T118 631T113 633T105 634T96 635T83 636T66 637Z"></path></g><g data-mml-node="mo" transform="translate(0,615)"><svg width="763" height="237" x="0" y="148" viewBox="190.7 148 763 237"><path data-c="2013" d="M0 248V285H499V248H0Z" transform="scale(2.289,1)"></path></svg></g></g></g></g></svg></mjx-container>分别为两样本对应的样本均值，则可构造统计量进行检验：</p>
 <blockquote>
