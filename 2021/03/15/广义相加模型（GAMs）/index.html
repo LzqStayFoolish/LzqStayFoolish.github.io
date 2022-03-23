@@ -43,25 +43,32 @@ daovoice('update');
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":240,"display":"hide","padding":18,"offset":20},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":"ture","trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="1. 背景目前小流量实验存在的问题：">
+<meta name="description" content="本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="uplift模型实践与应用">
-<meta property="og:url" content="http://example.com/2021/12/10/uplift%E6%A8%A1%E5%9E%8B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:title" content="广义相加模型（GAMs）">
+<meta property="og:url" content="http://example.com/2021/03/15/%E5%B9%BF%E4%B9%89%E7%9B%B8%E5%8A%A0%E6%A8%A1%E5%9E%8B%EF%BC%88GAMs%EF%BC%89/index.html">
 <meta property="og:site_name" content="Casterliu">
-<meta property="og:description" content="1. 背景目前小流量实验存在的问题：">
+<meta property="og:description" content="本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/media/2021-12-23%20/16402634500093.jpg">
-<meta property="og:image" content="http://example.com/media/2021-12-23%20/16402504699350.jpg">
-<meta property="article:published_time" content="2021-12-10T07:09:14.000Z">
-<meta property="article:modified_time" content="2022-01-06T08:14:33.331Z">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158075682624.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158735097296.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158735526489.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158752032767.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158760751925.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158761324407.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158780340453.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158769920356.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158770656414.jpg">
+<meta property="article:published_time" content="2021-03-15T08:54:28.000Z">
+<meta property="article:modified_time" content="2022-03-23T08:47:40.039Z">
 <meta property="article:author" content="Casterliu">
-<meta property="article:tag" content="uplift模型">
-<meta property="article:tag" content="因果推断">
+<meta property="article:tag" content="广义相加模型">
+<meta property="article:tag" content="统计学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/media/2021-12-23%20/16402634500093.jpg">
+<meta name="twitter:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158075682624.jpg">
 
 
-<link rel="canonical" href="http://example.com/2021/12/10/uplift%E6%A8%A1%E5%9E%8B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E5%BA%94%E7%94%A8/">
+<link rel="canonical" href="http://example.com/2021/03/15/%E5%B9%BF%E4%B9%89%E7%9B%B8%E5%8A%A0%E6%A8%A1%E5%9E%8B%EF%BC%88GAMs%EF%BC%89/">
 
 
 <script class="page-configurations">
@@ -73,7 +80,7 @@ daovoice('update');
     lang   : 'zh-CN'
   };
 </script>
-<title>uplift模型实践与应用 | Casterliu</title>
+<title>广义相加模型（GAMs） | Casterliu</title>
   
 
 
@@ -212,7 +219,7 @@ daovoice('update');
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">1. 背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%90%86%E8%AE%BA%E7%BB%BC%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">2. 理论综述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%A0%E6%9E%9C%E6%8E%A8%E6%96%AD"><span class="nav-number">2.1.</span> <span class="nav-text">因果推断</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#uplift%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">uplift模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE%E8%BD%AC%E5%8C%96%E6%A8%A1%E5%9E%8B-Class-Transformation-Method"><span class="nav-number">2.2.1.</span> <span class="nav-text">标签转化模型(Class Transformation Method)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#S-learner%EF%BC%88Meta-Learning%EF%BC%89"><span class="nav-number">2.2.2.</span> <span class="nav-text">S-learner（Meta-Learning）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#T-learner%EF%BC%88Meta-Learning%EF%BC%89"><span class="nav-number">2.2.3.</span> <span class="nav-text">T-learner（Meta-Learning）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#R-learner%EF%BC%88Meta-Learning%EF%BC%89"><span class="nav-number">2.2.4.</span> <span class="nav-text">R-learner（Meta-Learning）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#X-learner%EF%BC%88Meta-Learning%EF%BC%89"><span class="nav-number">2.2.5.</span> <span class="nav-text">X-learner（Meta-Learning）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A0%91%E6%A8%A1%E5%9E%8B-Tree-Based-Method"><span class="nav-number">2.2.6.</span> <span class="nav-text">树模型(Tree-Based Method)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6"><span class="nav-number">3.</span> <span class="nav-text">3. 整体框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%A1%B9%E7%9B%AE%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">4. 项目流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%AE%9E%E8%B7%B5%E6%94%B6%E7%9B%8A"><span class="nav-number">5.</span> <span class="nav-text">5. 实践收益</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E5%BC%8F"><span class="nav-number">6.</span> <span class="nav-text">6. 问题及解决方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-%E4%BB%BB%E5%8A%A1%E5%88%86%E6%95%A3%EF%BC%8C%E4%BA%BA%E5%B7%A5%E6%93%8D%E4%BD%9C%E8%BF%87%E5%A4%9A"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 任务分散，人工操作过多</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-%E9%A1%B9%E7%9B%AE%E7%8E%AF%E5%A2%83%E5%8F%8A%E8%B5%84%E6%BA%90%E9%97%AE%E9%A2%98"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 项目环境及资源问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-3-%E5%85%A8%E9%87%8F%E7%94%A8%E6%88%B7%E9%A2%84%E6%B5%8B"><span class="nav-number">6.3.</span> <span class="nav-text">6.3 全量用户预测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-4-%E6%A8%A1%E5%9E%8B%E6%95%88%E6%9E%9C"><span class="nav-number">6.4.</span> <span class="nav-text">6.4 模型效果</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GAM%E6%A8%A1%E5%9E%8B%E5%BD%A2%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">GAM模型形式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B7%E6%9D%A1%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">样条函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E6%95%B0%E9%87%8F%E7%9A%84%E9%80%89%E5%8F%96"><span class="nav-number">2.1.1.</span> <span class="nav-text">节点数量的选取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">2.1.2.</span> <span class="nav-text">节点的位置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AF%8F%E4%B8%AA%E5%8C%BA%E9%97%B4%E8%AF%A5%E5%A6%82%E4%BD%95%E7%A1%AE%E5%AE%9A%E6%8B%9F%E5%90%88%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.3.</span> <span class="nav-text">每个区间该如何确定拟合函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B1%82%E8%A7%A3"><span class="nav-number">2.1.4.</span> <span class="nav-text">求解</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#backfitting%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.4.1.</span> <span class="nav-text">backfitting方法</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -300,7 +307,7 @@ daovoice('update');
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/10/uplift%E6%A8%A1%E5%9E%8B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E5%BA%94%E7%94%A8/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/15/%E5%B9%BF%E4%B9%89%E7%9B%B8%E5%8A%A0%E6%A8%A1%E5%9E%8B%EF%BC%88GAMs%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/mine.jpeg">
@@ -313,7 +320,7 @@ daovoice('update');
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          uplift模型实践与应用
+          广义相加模型（GAMs）
         </h1>
 
         <div class="post-meta-container">
@@ -324,14 +331,14 @@ daovoice('update');
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-12-10 15:09:14" itemprop="dateCreated datePublished" datetime="2021-12-10T15:09:14+08:00">2021-12-10</time>
+      <time title="创建时间：2021-03-15 16:54:28" itemprop="dateCreated datePublished" datetime="2021-03-15T16:54:28+08:00">2021-03-15</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2022-01-06 16:14:33" itemprop="dateModified" datetime="2022-01-06T16:14:33+08:00">2022-01-06</time>
+        <time title="修改时间：2022-03-23 16:47:40" itemprop="dateModified" datetime="2022-03-23T16:47:40+08:00">2022-03-23</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -339,7 +346,7 @@ daovoice('update');
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" itemprop="url" rel="index"><span itemprop="name">项目总结</span></a>
+          <a href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/" itemprop="url" rel="index"><span itemprop="name">技术文章</span></a>
         </span>
     </span>
 
@@ -358,14 +365,14 @@ daovoice('update');
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.4k</span>
+      <span>1.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
@@ -376,88 +383,39 @@ daovoice('update');
     
     
     <div class="post-body" itemprop="articleBody">
-        <h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h3><p>目前小流量实验存在的问题：</p>
-<ul>
-<li>小流量实验结论负向和持平偏多，产品优化策略无法获得正反馈。</li>
-<li>对照组和实验组流量都是随机划分，无法定位到真正受益人群。</li>
-</ul>
-<p>核心解法思路：</p>
-<ul>
-<li>根据用户画像、用户活跃度和用户行为特征，通过uplift增益模型对手百实验进行增益学习，发现对手百指标的影响（正向、负向、无影响），找到产品策略”敏感人群”；筛选出高增益的用户进行人群投放，提升手百关键指标，如DAU、留存等；</li>
-</ul>
-<p>根据uplift模型，可将人群划分至下面四象限中，找到persuadables（实验带来正向效果）的人群，具体如下：<br> <center>![](/media/2021-12-13 /16393794522173.jpg)</center></p>
-<h3 id="2-理论综述"><a href="#2-理论综述" class="headerlink" title="2. 理论综述"></a>2. 理论综述</h3><h4 id="因果推断"><a href="#因果推断" class="headerlink" title="因果推断"></a>因果推断</h4><h4 id="uplift模型"><a href="#uplift模型" class="headerlink" title="uplift模型"></a>uplift模型</h4><h5 id="标签转化模型-Class-Transformation-Method"><a href="#标签转化模型-Class-Transformation-Method" class="headerlink" title="标签转化模型(Class Transformation Method)"></a>标签转化模型(Class Transformation Method)</h5><p>标签转化模型适合二分类<br>标签设置：<br><img data-src="/media/2021-12-23 /16402634500093.jpg" alt=""></p>
-<p>实验组对照组数据打通和模型打通的方法叫做class transformation method，uplift分数τ 可以表示为：</p>
-<p>理论证明：</p>
-<pre><code>下面来证明上面的式子相当于是求P（Z = 1|X）
-
-
-在随机化实验中，P（G=T）和P（G=C）可以认为都是1/2，即一个用户被分在实验组（有干预策略）和被分在对照组（无干预策略）的概率是相等的。 在该假设下，(6)式可以改写为：
-
-
-那么：
-</code></pre><p>实际应用：</p>
-<pre><code>计算的uplift score实际上就是优化P（z=1|x），所以这个方法称为Class Transformation Method.
-</code></pre><p>模型优点：</p>
-<pre><code>实际上，Z = 1 Z=1Z=1就是实验组中下单的用户和对照组中未下单的用户，因此可以直接将实验组和对照组用户合并，使用一个模型建模，实现了数据层面和模型层面的打通。
-预测时，模型预测的结果就是uplift score，这点与差分响应模型不同。
-</code></pre><h5 id="S-learner（Meta-Learning）"><a href="#S-learner（Meta-Learning）" class="headerlink" title="S-learner（Meta-Learning）"></a>S-learner（Meta-Learning）</h5><p>把对照组和实验组放在一起建模，把实验分组作为特征加入训练特征。如果该样本进入实验组vs对照组模型预测的差异作为对实验影响的估计。<br>计算步骤：</p>
+        <p>本文旨在根据自己的理解，对广义相加模型（GAMs）进行总结归纳，便于以后的回顾和查看。<br><span id="more"></span></p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>在现实生活中，变量的作用通常不是线性的，线性假设很可能不能满足实际需求，甚至直接违背实际情况，GAM是一种在线性的框架内，构造非线性的响应模型的方法。</p>
+<h2 id="GAM模型形式"><a href="#GAM模型形式" class="headerlink" title="GAM模型形式"></a>GAM模型形式</h2><p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158075682624.jpg" alt="-w457"><br>其中函数<strong>f</strong>可以是线性项、多项式项、样条函数或核函数。</p>
+<h3 id="样条函数"><a href="#样条函数" class="headerlink" title="样条函数"></a>样条函数</h3><p>简单线性回归和多项式回归的拟合都是全局性的，使用相同的方程预测自变量的每一个值所对应的因变量。然而实际中随着自变量取值的变化，其与因变量之间的关系也可能是在不断变化的。</p>
+<p>样条函数就是把自变量划分成多个连续的区间，每一个区间都用单独的线性函数或非线性的低阶多项式函数来拟合得到的函数。</p>
+<h4 id="节点数量的选取"><a href="#节点数量的选取" class="headerlink" title="节点数量的选取"></a>节点数量的选取</h4><p>可以使用广义交叉验证选择节点数。这种方法的基本思路是：</p>
 <ol>
-<li>基于变量X和干预W训练预测模型</li>
-<li>分别估计干预和不干预时的得分，差值即为增量  </li>
+<li>取出一部分数据</li>
+<li>用某一数量的节点使样条拟合剩下的这些数据</li>
+<li>用样条拟合之前取出的数据</li>
+<li>重复步骤1-3，直到每个观察值都被取出过一次，计算整个交叉验证过程的均方根误差RMSE</li>
+<li>针对不同数量的节点重复1-4，最后选择最小RMSE时的节点数量</li>
 </ol>
-<p>S-Learner的思想很常见，和可解释机器学习中的Individual Conditional Expectation(ICE)本质是一样的， 在全样本上求平均也就是大家熟悉的Partial Dependence。</p>
-<h5 id="T-learner（Meta-Learning）"><a href="#T-learner（Meta-Learning）" class="headerlink" title="T-learner（Meta-Learning）"></a>T-learner（Meta-Learning）</h5><p>Two-Learner是基于双模型的差分模型，我们对实验组（有干预）和对照组（无干预）的购买行为进行分别建模，然后用训练所得两个模型分别对全量用户的购买行为进行预测，此时一个样本用户即可得出有干预和无干预情况下两个购买行为预测值。这两个预测值的差就是我们想要的uplift score。</p>
-<p>Step1：分别计算对照组和实验组的预测值</p>
-<p>[魏倩 &gt; 精算项目技术框架 &gt; image2021-10-14_15-12-27.png]</p>
-<p>Step2：计算Uplift Score</p>
-<p>[魏倩 &gt; 精算项目技术框架 &gt; image2021-10-14_15-14-38.png]</p>
-<p>Step1：分别计算对照组和实验组的预测值</p>
-<p>[魏倩 &gt; 精算项目技术框架 &gt; image2021-10-14_15-12-27.png]</p>
-<p>Step2：计算Uplift Score</p>
-<p>[魏倩 &gt; 精算项目技术框架 &gt; image2021-10-14_15-14-38.png] </p>
-<h5 id="R-learner（Meta-Learning）"><a href="#R-learner（Meta-Learning）" class="headerlink" title="R-learner（Meta-Learning）"></a>R-learner（Meta-Learning）</h5><h5 id="X-learner（Meta-Learning）"><a href="#X-learner（Meta-Learning）" class="headerlink" title="X-learner（Meta-Learning）"></a>X-learner（Meta-Learning）</h5><p>X-Learner是针对上述提到的问题对T-Learner和S-Learner进行了融合。步骤如下：</p>
-<ol>
-<li>分别对对照组和实验组进行建模得到模型M1,M2和T-Learner一样</li>
-<li>把对照组放进实验组模型预测，再把实验组放进对照组模型预测，预测值和实际值的差作为HTE的近似。这里和S-Learner的思路近似是imputation的做法。</li>
-<li>实验组和对照组分别对上述target建模得到M3,M4，每个样本得到两个预测值然后加权，权重一般可选propensity score，随机实验中可以直接用进组用户数，流量相同的随机实验直接用0.5感觉也没啥问题。</li>
+<h4 id="节点的位置"><a href="#节点的位置" class="headerlink" title="节点的位置"></a>节点的位置</h4><p>在数据变化复杂的地方多设置节点，在看起来更稳定的地方少设置节点。比如研究大气污染的健康效应时，在暴露反应关系可能存在拐点的地方设置节点。实际中，一般会截取长度相同的区间设置节点。</p>
+<h4 id="每个区间该如何确定拟合函数"><a href="#每个区间该如何确定拟合函数" class="headerlink" title="每个区间该如何确定拟合函数"></a>每个区间该如何确定拟合函数</h4><p>理论上可以用任意低阶多项式拟合某个单独区间，最终得到的模型就是分段多项式。但分段多项式不能随便设定，它有两个限制条件：</p>
+<ul>
+<li>连续性：多项式在节点处应该是连续的；<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158735097296.jpg" alt="-w247"></li>
+<li>平滑性：相邻多项式的导数必须相同(如果拟合的是m阶多项式，则应保证相邻多项式的一阶导数至m-1阶导数均相等)；<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158735526489.jpg" alt="-w257"></li>
+</ul>
+<p>常见样条函数：</p>
+<ul>
+<li>三次样条函数：具有连续性、且一阶和二阶导连续的三阶分段多项式<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158752032767.jpg" alt=""></li>
+<li>薄板样条函数：可同时平滑多个变量，因此一般在研究多个变量的交互作用时使用</li>
+</ul>
+<h4 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h4><p>假设我们样条函数为g(x),再求得该函数参数的同时，如何保证样条曲线的平滑性呢？<br>添加对平滑性的惩罚项<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158760751925.jpg" alt=""><br>上式中的惩罚项表示为对区间t内，一阶导数<em>g′(t)</em>累计的变化情况，因此可以用来衡量该段区间整体的平滑性。<br>整体拟合函数项为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158761324407.jpg" alt=""></p>
+<h5 id="backfitting方法"><a href="#backfitting方法" class="headerlink" title="backfitting方法"></a>backfitting方法</h5><p>使用backfitting（回修）方法求解整体拟合函数，方法流程为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158780340453.jpg" alt=""></p>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><ol>
+<li>可以引入非线性函数;</li>
+<li>非线性可能使得对预测的更准确;</li>
+<li>因为是”加性的”，所以，线性模型的假设检验的方法仍然可以使用;</li>
+<li>因为是“加性”假设，所以GAMs中可能会缺失重要的交互作用，只能通过手动添加交互项来弥补，如下所示：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158769920356.jpg" alt=""><br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/2021/03/16/16158770656414.jpg" alt=""></li>
 </ol>
-<h5 id="树模型-Tree-Based-Method"><a href="#树模型-Tree-Based-Method" class="headerlink" title="树模型(Tree-Based Method)"></a>树模型(Tree-Based Method)</h5><h3 id="3-整体框架"><a href="#3-整体框架" class="headerlink" title="3. 整体框架"></a>3. 整体框架</h3><p><img data-src="/media/2021-12-23 /16402504699350.jpg" alt="-w600"></p>
-<h3 id="4-项目流程"><a href="#4-项目流程" class="headerlink" title="4. 项目流程"></a>4. 项目流程</h3><h3 id="5-实践收益"><a href="#5-实践收益" class="headerlink" title="5. 实践收益"></a>5. 实践收益</h3><h3 id="6-问题及解决方式"><a href="#6-问题及解决方式" class="headerlink" title="6. 问题及解决方式"></a>6. 问题及解决方式</h3><h4 id="6-1-任务分散，人工操作过多"><a href="#6-1-任务分散，人工操作过多" class="headerlink" title="6.1 任务分散，人工操作过多"></a>6.1 任务分散，人工操作过多</h4><p>问题描述：</p>
-<ul>
-<li>项目包含基于scala的spark任务和基于python的模型代码；</li>
-<li>Spark任务在pingo或spark shell中执行，模型在开发机上训练及预测；</li>
-<li>任务串行需要人工执行；</li>
-</ul>
-<p>解决方案：重构项目整体框架，在pingo中配置远程执行依赖任务，自动串行执行项目代码。</p>
-<h4 id="6-2-项目环境及资源问题"><a href="#6-2-项目环境及资源问题" class="headerlink" title="6.2 项目环境及资源问题"></a>6.2 项目环境及资源问题</h4><p>问题描述：</p>
-<ul>
-<li>精算项目包含众多Uplift模型库，对计算环境要求较高，部署在公共开发机中环境易被污染；</li>
-<li>聚类任务在pingo中执行耗时过长，且受平台限制易失败；</li>
-</ul>
-<p>解决方案：</p>
-<ul>
-<li>申请并配置新虚拟机，项目迁移后保证计算环境干净；</li>
-<li>Pingo和开发机都只有CPU计算资源，聚类效率存在瓶颈，采用faiss算法的GPU版聚类，大大提高聚类效率；（GPU机器不稳定）</li>
-</ul>
-<h4 id="6-3-全量用户预测"><a href="#6-3-全量用户预测" class="headerlink" title="6.3 全量用户预测"></a>6.3 全量用户预测</h4><p>问题描述：</p>
-<ul>
-<li>pingo平台无法加载本地训练uplift模型；</li>
-<li>全量用户量级太大，开发机配置不够，无法直接进行预测；</li>
-<li>Python任务自动化执行困难</li>
-</ul>
-<p>解决方案：</p>
-<ul>
-<li>升级虚拟机，本地加载模型进行预测；</li>
-<li>切分全量用户，多进程方式并行预测，提升执行速率；</li>
-<li>子进程读取数据流完成下载与上传，完成自动化；</li>
-</ul>
-<h4 id="6-4-模型效果"><a href="#6-4-模型效果" class="headerlink" title="6.4 模型效果"></a>6.4 模型效果</h4><p>问题描述：</p>
-<ul>
-<li>无法准确圈出persuadable和sleeping dog人群；</li>
-<li>uplift模型评价指标过低，准确度不够；</li>
-</ul>
-<p>解决方案：使用网格搜索+交叉验证的方式，优化模型参数，提高模型的uplift score和准确率；</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>可加模型提供一个有用的线性模型拓展，使得不仅保留着大部分的可解释性，也更加灵活；</p>
 
     </div>
 
@@ -499,7 +457,7 @@ daovoice('update');
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="http://example.com/2021/12/10/uplift%E6%A8%A1%E5%9E%8B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E5%BA%94%E7%94%A8/" title="uplift模型实践与应用">http://example.com/2021/12/10/uplift模型实践与应用/</a>
+      <a href="http://example.com/2021/03/15/%E5%B9%BF%E4%B9%89%E7%9B%B8%E5%8A%A0%E6%A8%A1%E5%9E%8B%EF%BC%88GAMs%EF%BC%89/" title="广义相加模型（GAMs）">http://example.com/2021/03/15/广义相加模型（GAMs）/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh_Hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -508,21 +466,18 @@ daovoice('update');
 </div>
 
           <div class="post-tags">
-              <a href="/tags/uplift%E6%A8%A1%E5%9E%8B/" rel="tag"><i class="fa fa-tag"></i> uplift模型</a>
-              <a href="/tags/%E5%9B%A0%E6%9E%9C%E6%8E%A8%E6%96%AD/" rel="tag"><i class="fa fa-tag"></i> 因果推断</a>
+              <a href="/tags/%E5%B9%BF%E4%B9%89%E7%9B%B8%E5%8A%A0%E6%A8%A1%E5%9E%8B/" rel="tag"><i class="fa fa-tag"></i> 广义相加模型</a>
+              <a href="/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6/" rel="tag"><i class="fa fa-tag"></i> 统计学</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/03/15/%E5%B9%BF%E4%B9%89%E7%9B%B8%E5%8A%A0%E6%A8%A1%E5%9E%8B%EF%BC%88GAMs%EF%BC%89/" rel="prev" title="广义相加模型（GAMs）">
-                  <i class="fa fa-chevron-left"></i> 广义相加模型（GAMs）
-                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/12/22/%E5%95%86%E4%B8%9A%E5%88%86%E6%9E%90%E6%96%B9%E6%B3%95%E4%B8%8E%E6%A8%A1%E5%9E%8B/" rel="next" title="商业分析方法与模型">
-                  商业分析方法与模型 <i class="fa fa-chevron-right"></i>
+                <a href="/2021/12/10/uplift%E6%A8%A1%E5%9E%8B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E5%BA%94%E7%94%A8/" rel="next" title="uplift模型实践与应用">
+                  uplift模型实践与应用 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
