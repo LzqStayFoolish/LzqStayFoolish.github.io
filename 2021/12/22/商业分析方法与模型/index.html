@@ -43,21 +43,45 @@ daovoice('update');
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"width":240,"display":"hide","padding":18,"offset":20},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"buttons","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":"ture","trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="提升用户转化（付费）![-w300](https:&#x2F;&#x2F;casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com&#x2F;casterliu_blog&#x2F;2022&#x2F;03&#x2F;23&#x2F;16400876481662.jpg)">
+<meta name="description" content="提升用户转化（付费）提高电商平台的订单转化率，我们需要从三个方面入手：商品分析、用户分析和归因分析。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="商业分析方法与模型">
 <meta property="og:url" content="http://example.com/2021/12/22/%E5%95%86%E4%B8%9A%E5%88%86%E6%9E%90%E6%96%B9%E6%B3%95%E4%B8%8E%E6%A8%A1%E5%9E%8B/index.html">
 <meta property="og:site_name" content="Casterliu">
-<meta property="og:description" content="提升用户转化（付费）![-w300](https:&#x2F;&#x2F;casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com&#x2F;casterliu_blog&#x2F;2022&#x2F;03&#x2F;23&#x2F;16400876481662.jpg)">
+<meta property="og:description" content="提升用户转化（付费）提高电商平台的订单转化率，我们需要从三个方面入手：商品分析、用户分析和归因分析。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400876481662.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400722835686.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400730073528.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16413507381583.jpg">
+<meta property="og:image" content="http://example.com/media/2022-01-05%20/16413654649297.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400859137520.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400861978019.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400892966347.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400776561536.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400777169960.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400777943530.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400778298866.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400794661930.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400801561296.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400881260538.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401581131136.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401583577701.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401563988827.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401564341245.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401563062233.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401565413171.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16413507381583.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16414434541159.jpg">
 <meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16413688335077.jpg">
+<meta property="og:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400722835686.jpg">
 <meta property="article:published_time" content="2021-12-22T07:48:07.000Z">
-<meta property="article:modified_time" content="2022-03-23T08:40:05.285Z">
+<meta property="article:modified_time" content="2022-03-23T09:04:26.029Z">
 <meta property="article:author" content="Casterliu">
 <meta property="article:tag" content="电商分析方法">
 <meta property="article:tag" content="精准营销">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16413688335077.jpg">
+<meta name="twitter:image" content="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400876481662.jpg">
 
 
 <link rel="canonical" href="http://example.com/2021/12/22/%E5%95%86%E4%B8%9A%E5%88%86%E6%9E%90%E6%96%B9%E6%B3%95%E4%B8%8E%E6%A8%A1%E5%9E%8B/">
@@ -211,7 +235,7 @@ daovoice('update');
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%8D%87%E7%94%A8%E6%88%B7%E8%BD%AC%E5%8C%96%EF%BC%88%E4%BB%98%E8%B4%B9%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">提升用户转化（付费）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%94%A8%E6%88%B7%E5%88%86%E6%9E%90-%E7%B2%BE%E5%87%86%E8%90%A5%E9%94%80"><span class="nav-number">1.1.</span> <span class="nav-text">2. 用户分析-精准营销</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-%E4%B8%AA%E6%80%A7%E5%8C%96%E6%8E%A8%E8%8D%90-%E5%8D%83%E4%BA%BA%E5%8D%83%E9%9D%A2"><span class="nav-number">1.1.1.</span> <span class="nav-text">2.3 个性化推荐-千人千面</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-1-%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">2.3.1 协同过滤</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#V1"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">V1</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-2-%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">2.3.2 矩阵分解</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BD%92%E5%9B%A0%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">3. 归因分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E9%A6%96%E6%AC%A1%E8%A7%A6%E7%82%B9%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">3.1 首次触点模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-%E6%9C%AB%E6%AC%A1%E8%A7%A6%E7%82%B9%E5%BD%92%E5%9B%A0"><span class="nav-number">1.2.2.</span> <span class="nav-text">3.2 末次触点归因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-%E7%BA%BF%E6%80%A7%E5%BD%92%E5%9B%A0"><span class="nav-number">1.2.3.</span> <span class="nav-text">3.3 线性归因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-%E6%97%B6%E9%97%B4%E8%A1%B0%E5%87%8F%E5%BD%92%E5%9B%A0"><span class="nav-number">1.2.4.</span> <span class="nav-text">3.4 时间衰减归因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-%E4%BD%8D%E7%BD%AE%E5%BD%92%E5%9B%A0"><span class="nav-number">1.2.5.</span> <span class="nav-text">3.5 位置归因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-6-%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E9%93%BE"><span class="nav-number">1.2.6.</span> <span class="nav-text">3.6 马尔科夫链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#V1-1"><span class="nav-number">1.2.7.</span> <span class="nav-text">V1</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%A2%E5%A3%AB%E9%A1%BF%E7%9F%A9%E9%98%B5"><span class="nav-number">1.2.7.1.</span> <span class="nav-text">波士顿矩阵</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4"><span class="nav-number">1.2.7.2.</span> <span class="nav-text">基于项目的协同过滤</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BD%AC%E5%8C%96%E8%B7%AF%E5%BE%84"><span class="nav-number">1.2.7.3.</span> <span class="nav-text">转化路径</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%8D%87%E7%94%A8%E6%88%B7%E8%BD%AC%E5%8C%96%EF%BC%88%E4%BB%98%E8%B4%B9%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">提升用户转化（付费）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%95%86%E5%93%81%E5%88%86%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text">1. 商品分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-%E8%BD%AC%E5%8C%96%E8%B7%AF%E5%BE%84%E5%88%86%E6%9E%90"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">1.1 转化路径分析</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-%E5%95%86%E5%93%81%E5%88%86%E7%B1%BB%E5%88%86%E6%9E%90"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">1.2 商品分类分析</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#V1%E7%89%88"><span class="nav-number">1.1.0.3.</span> <span class="nav-text">V1版</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%94%A8%E6%88%B7%E5%88%86%E6%9E%90-%E7%B2%BE%E5%87%86%E8%90%A5%E9%94%80"><span class="nav-number">1.2.</span> <span class="nav-text">2. 用户分析-精准营销</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-Lookalike%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 Lookalike算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-1-%E6%98%BE%E5%BC%8F%E5%AE%9A%E4%BD%8D%EF%BC%9A%E6%A0%B9%E6%8D%AE%E7%94%A8%E6%88%B7%E7%94%BB%E5%83%8F%E6%A0%87%E7%AD%BE%E7%AD%9B%E9%80%89"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">2.1.1 显式定位：根据用户画像标签筛选</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-1-1-%E7%94%A8%E6%88%B7%E7%89%B9%E5%BE%81"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">2.1.1.1 用户特征</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-1-2-%E5%95%86%E5%93%81%E7%89%B9%E5%BE%81"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">2.1.1.2 商品特征</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-1-3-%E6%B8%A0%E9%81%93%E7%89%B9%E5%BE%81"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">2.1.1.3 渠道特征</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-2-%E9%9A%90%E5%BC%8F%E5%AE%9A%E4%BD%8D"><span class="nav-number">1.2.1.5.</span> <span class="nav-text">2.1.2 隐式定位</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-2-1-%E5%9F%BA%E4%BA%8E%E7%9B%B8%E4%BC%BC%E5%BA%A6%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.1.6.</span> <span class="nav-text">2.1.2.1 基于相似度模型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-2-2-%E5%9F%BA%E4%BA%8E%E5%88%86%E7%B1%BB%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.1.7.</span> <span class="nav-text">2.1.2.2 基于分类模型</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#LR%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.1.7.1.</span> <span class="nav-text">LR算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-uplift%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 uplift模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-%E4%B8%AA%E6%80%A7%E5%8C%96%E6%8E%A8%E8%8D%90-%E5%8D%83%E4%BA%BA%E5%8D%83%E9%9D%A2"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 个性化推荐-千人千面</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-1-%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">2.3.1 协同过滤</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#V1"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">V1</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-2-%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">2.3.2 矩阵分解</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BD%92%E5%9B%A0%E5%88%86%E6%9E%90"><span class="nav-number">1.3.</span> <span class="nav-text">3. 归因分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E9%A6%96%E6%AC%A1%E8%A7%A6%E7%82%B9%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 首次触点模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-%E6%9C%AB%E6%AC%A1%E8%A7%A6%E7%82%B9%E5%BD%92%E5%9B%A0"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 末次触点归因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-%E7%BA%BF%E6%80%A7%E5%BD%92%E5%9B%A0"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 线性归因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-%E6%97%B6%E9%97%B4%E8%A1%B0%E5%87%8F%E5%BD%92%E5%9B%A0"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 时间衰减归因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-%E4%BD%8D%E7%BD%AE%E5%BD%92%E5%9B%A0"><span class="nav-number">1.3.5.</span> <span class="nav-text">3.5 位置归因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-6-%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E9%93%BE"><span class="nav-number">1.3.6.</span> <span class="nav-text">3.6 马尔科夫链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#V1-1"><span class="nav-number">1.3.7.</span> <span class="nav-text">V1</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%A2%E5%A3%AB%E9%A1%BF%E7%9F%A9%E9%98%B5"><span class="nav-number">1.3.7.1.</span> <span class="nav-text">波士顿矩阵</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4"><span class="nav-number">1.3.7.2.</span> <span class="nav-text">基于项目的协同过滤</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BD%AC%E5%8C%96%E8%B7%AF%E5%BE%84"><span class="nav-number">1.3.7.3.</span> <span class="nav-text">转化路径</span></a></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -330,7 +354,7 @@ daovoice('update');
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2022-03-23 16:40:05" itemprop="dateModified" datetime="2022-03-23T16:40:05+08:00">2022-03-23</time>
+        <time title="修改时间：2022-03-23 17:04:26" itemprop="dateModified" datetime="2022-03-23T17:04:26+08:00">2022-03-23</time>
       </span>
 
   
@@ -348,14 +372,14 @@ daovoice('update');
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>6.5k</span>
+      <span>3.7k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>6 分钟</span>
+      <span>3 分钟</span>
     </span>
 </div>
 
@@ -366,87 +390,43 @@ daovoice('update');
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="提升用户转化（付费）"><a href="#提升用户转化（付费）" class="headerlink" title="提升用户转化（付费）"></a>提升用户转化（付费）</h2><center>![-w300](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400876481662.jpg)
-</center>
-提高电商平台的订单转化率，我们需要从三个方面入手：商品分析、用户分析和归因分析。
-### 1. 商品分析
-##### 1.1 转化路径分析
-电商购买流程的主路径为：
-<center>![-w550](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400722835686.jpg)
-</center>
-针对关键路径转化“UV-点击”、“点击-加入购物车”、“购物车-支付成功”，不同商品的转化率进行比较分析，监测SKU的更新变化。
-
-##### 1.2 商品分类分析
-根据商品品类的转化率，利用**波士顿矩阵**将商品品类分成以下4种。
-- 导流型品类：利润非常低，但是购买量大、市场需求大，目的在于导流。
-- 高利润型品类：利润率高，希望用户更多购买此类商品。
-- 高转化品类：带量。
-- 未来明星型品类：这是电商平台的潜力股，虽然曝光量很低，但是转化率极高。
-![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400730073528.jpg)
-
-上图的**波士顿矩阵**，横坐标代表商品的曝光量，纵坐标是商品的转化率，图中的每一个圆圈代表一个品类的商品。右上角的商品品类曝光量大、转化率高，是现金流的重要业务；而左上角的商品虽然曝光率非常低，但是转化率极高，属于我们上面提到的未来明星型品类，对于这一类商品，我们在后期的运营中可以增加其曝光量。
-##### V1版
-依据波士顿矩阵，从曝光量 -> 转化率 -> 回购率三个方向对商品进行划分，将商品分为八类。
-定义：
-- 曝光量：两周内商品的曝光次数
-- 转化率：两周内商品的订单转化次数/点击次数
-- 回购率：两周内转化的商品在未来一周内产生复购的量/两周内的转化量
-<center>![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16413507381583.jpg)</center>
-商品划分后，可拆分如下商品转化路径，不同转化都存在对应策略。
-<center>![](/media/2022-01-05 /16413654649297.jpg)
-</center>
-
-<h3 id="2-用户分析-精准营销"><a href="#2-用户分析-精准营销" class="headerlink" title="2. 用户分析-精准营销"></a>2. 用户分析-精准营销</h3><p>通过用户全生命周期精准营销和精细化运营，提升用户增长的北极星目标，其场景和流程如下图所示：</p>
-<center>![-w400](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400859137520.jpg)![-w200](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400861978019.jpg)
-</center>
-#### 2.1 Lookalike算法
-Lookalike的目的是基于目标人群，从海量的人群中找出和目标人群相似的其他人群，分为显示定位和隐式定位。
-<center>![-w400](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400892966347.jpg)
-</center>
-##### 2.1.1 显式定位：根据用户画像标签筛选
-建立用户画像体系，对人群进行细分并添加标签，电商平台画像可从用户特征，商品特征和渠道特征三个方向建立：
-<center>![-w400](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400776561536.jpg)
-</center>
-##### 2.1.1.1 用户特征
-<center>
-![-w400](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400777169960.jpg)
-</center>
-##### 2.1.1.2 商品特征
-<center>
-![-w500](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400777943530.jpg)
-</center>
-##### 2.1.1.3 渠道特征
-<center>![-w400](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400778298866.jpg)
-</center>
-##### 2.1.2 隐式定位
-通过机器学习、深度学习的方法，对种子用户进行建模，然后用模型去识别。
-##### 2.1.2.1 基于相似度模型
-基于User-User之间的某种距离大小来衡量用户之间的相似度。
-<center>![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400794661930.jpg)
-</center>
-计算完个体之间的距离后，再计算个体和样本的距离，来确定个体属于哪个种子用户
-##### 2.1.2.2 基于分类模型
-将look-alike看成是分类问题，很多的分类算法都可适用，例如LR算法，XGB模型和RF模型等。
-###### LR算法
-将种子用户作为正例，将随机用户进行降采样后作为负例，为每个种子训练一个LR模型。用这个模型在全部用户上预测，后去判断其他的用户是否为目标人群，模型如下：
-<center>![-w158](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400801561296.jpg)
-</center>
-#### 2.2 uplift模型
-通过uplift定位产品策略的受益人群，针对persuadable人群进行下发，保证营销效用最大化。
-<center>![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400881260538.jpg)
-</center>
-
+        <h2 id="提升用户转化（付费）"><a href="#提升用户转化（付费）" class="headerlink" title="提升用户转化（付费）"></a>提升用户转化（付费）</h2><p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400876481662.jpg" alt="-w300"><br>提高电商平台的订单转化率，我们需要从三个方面入手：商品分析、用户分析和归因分析。</p>
+<h3 id="1-商品分析"><a href="#1-商品分析" class="headerlink" title="1. 商品分析"></a>1. 商品分析</h3><h5 id="1-1-转化路径分析"><a href="#1-1-转化路径分析" class="headerlink" title="1.1 转化路径分析"></a>1.1 转化路径分析</h5><p>电商购买流程的主路径为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400722835686.jpg" alt="-w550"><br>针对关键路径转化“UV-点击”、“点击-加入购物车”、“购物车-支付成功”，不同商品的转化率进行比较分析，监测SKU的更新变化。</p>
+<h5 id="1-2-商品分类分析"><a href="#1-2-商品分类分析" class="headerlink" title="1.2 商品分类分析"></a>1.2 商品分类分析</h5><p>根据商品品类的转化率，利用<strong>波士顿矩阵</strong>将商品品类分成以下4种。</p>
+<ul>
+<li>导流型品类：利润非常低，但是购买量大、市场需求大，目的在于导流。</li>
+<li>高利润型品类：利润率高，希望用户更多购买此类商品。</li>
+<li>高转化品类：带量。</li>
+<li>未来明星型品类：这是电商平台的潜力股，虽然曝光量很低，但是转化率极高。<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400730073528.jpg" alt=""></li>
+</ul>
+<p>上图的<strong>波士顿矩阵</strong>，横坐标代表商品的曝光量，纵坐标是商品的转化率，图中的每一个圆圈代表一个品类的商品。右上角的商品品类曝光量大、转化率高，是现金流的重要业务；而左上角的商品虽然曝光率非常低，但是转化率极高，属于我们上面提到的未来明星型品类，对于这一类商品，我们在后期的运营中可以增加其曝光量。</p>
+<h5 id="V1版"><a href="#V1版" class="headerlink" title="V1版"></a>V1版</h5><p>依据波士顿矩阵，从曝光量 -&gt; 转化率 -&gt; 回购率三个方向对商品进行划分，将商品分为八类。<br>定义：</p>
+<ul>
+<li>曝光量：两周内商品的曝光次数</li>
+<li>转化率：两周内商品的订单转化次数/点击次数</li>
+<li>回购率：两周内转化的商品在未来一周内产生复购的量/两周内的转化量<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16413507381583.jpg" alt=""><br>商品划分后，可拆分如下商品转化路径，不同转化都存在对应策略。<br><img data-src="/media/2022-01-05 /16413654649297.jpg" alt=""></li>
+</ul>
+<h3 id="2-用户分析-精准营销"><a href="#2-用户分析-精准营销" class="headerlink" title="2. 用户分析-精准营销"></a>2. 用户分析-精准营销</h3><p>通过用户全生命周期精准营销和精细化运营，提升用户增长的北极星目标，其场景和流程如下图所示：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400859137520.jpg" alt="-w400"><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400861978019.jpg" alt="-w200"></p>
+<h4 id="2-1-Lookalike算法"><a href="#2-1-Lookalike算法" class="headerlink" title="2.1 Lookalike算法"></a>2.1 Lookalike算法</h4><p>Lookalike的目的是基于目标人群，从海量的人群中找出和目标人群相似的其他人群，分为显示定位和隐式定位。<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400892966347.jpg" alt="-w400"></p>
+<h5 id="2-1-1-显式定位：根据用户画像标签筛选"><a href="#2-1-1-显式定位：根据用户画像标签筛选" class="headerlink" title="2.1.1 显式定位：根据用户画像标签筛选"></a>2.1.1 显式定位：根据用户画像标签筛选</h5><p>建立用户画像体系，对人群进行细分并添加标签，电商平台画像可从用户特征，商品特征和渠道特征三个方向建立：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400776561536.jpg" alt="-w400"></p>
+<h5 id="2-1-1-1-用户特征"><a href="#2-1-1-1-用户特征" class="headerlink" title="2.1.1.1 用户特征"></a>2.1.1.1 用户特征</h5><p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400777169960.jpg" alt="-w400"></p>
+<h5 id="2-1-1-2-商品特征"><a href="#2-1-1-2-商品特征" class="headerlink" title="2.1.1.2 商品特征"></a>2.1.1.2 商品特征</h5><p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400777943530.jpg" alt="-w500"></p>
+<h5 id="2-1-1-3-渠道特征"><a href="#2-1-1-3-渠道特征" class="headerlink" title="2.1.1.3 渠道特征"></a>2.1.1.3 渠道特征</h5><p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400778298866.jpg" alt="-w400"></p>
+<h5 id="2-1-2-隐式定位"><a href="#2-1-2-隐式定位" class="headerlink" title="2.1.2 隐式定位"></a>2.1.2 隐式定位</h5><p>通过机器学习、深度学习的方法，对种子用户进行建模，然后用模型去识别。</p>
+<h5 id="2-1-2-1-基于相似度模型"><a href="#2-1-2-1-基于相似度模型" class="headerlink" title="2.1.2.1 基于相似度模型"></a>2.1.2.1 基于相似度模型</h5><p>基于User-User之间的某种距离大小来衡量用户之间的相似度。<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400794661930.jpg" alt=""></p>
+<p>计算完个体之间的距离后，再计算个体和样本的距离，来确定个体属于哪个种子用户</p>
+<h5 id="2-1-2-2-基于分类模型"><a href="#2-1-2-2-基于分类模型" class="headerlink" title="2.1.2.2 基于分类模型"></a>2.1.2.2 基于分类模型</h5><p>将look-alike看成是分类问题，很多的分类算法都可适用，例如LR算法，XGB模型和RF模型等。</p>
+<h6 id="LR算法"><a href="#LR算法" class="headerlink" title="LR算法"></a>LR算法</h6><p>将种子用户作为正例，将随机用户进行降采样后作为负例，为每个种子训练一个LR模型。用这个模型在全部用户上预测，后去判断其他的用户是否为目标人群，模型如下：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400801561296.jpg" alt="-w158"></p>
+<h4 id="2-2-uplift模型"><a href="#2-2-uplift模型" class="headerlink" title="2.2 uplift模型"></a>2.2 uplift模型</h4><p>通过uplift定位产品策略的受益人群，针对persuadable人群进行下发，保证营销效用最大化。<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400881260538.jpg" alt=""></p>
 <h4 id="2-3-个性化推荐-千人千面"><a href="#2-3-个性化推荐-千人千面" class="headerlink" title="2.3 个性化推荐-千人千面"></a>2.3 个性化推荐-千人千面</h4><p>“千人千面”是指结合依靠电商平台庞大的数据库，从细分类目中抓取那些特征与买家兴趣点匹配的推广宝贝，为展现在目标客户浏览的网页上，帮助您锁定潜在买家，实现精准营销。</p>
 <p>依托用户画像，每个消费者只要有在电商平台上购买或是浏览过，就会给用户打上标签，比如年龄、喜好、关注点等。标签的不同，千人千面展示下看到的产品就会有所差别。就像两个男生从来没有买过女性产品，但是第一次给女性买东西，搜索同一个关键词比如连衣裙 女，那么看到的也不一样，平台会根据你以往的一些购买行为打上标签，比如是年轻，高客单的，那么展示在你面前的连衣裙也会投放与这些标签相似度比较高的产品，这就是千人千面深入一步的展示。</p>
 <h5 id="2-3-1-协同过滤"><a href="#2-3-1-协同过滤" class="headerlink" title="2.3.1 协同过滤"></a>2.3.1 协同过滤</h5><ul>
 <li>基本思想：我们想给用户推荐东西，最合乎逻辑方法是找到具有相似兴趣的人，分析他们的行为，并向用户推荐相同的项目。另一种方法是看看用于以前买的商品，然后给他们推荐相似的。</li>
-<li>包括<strong>基于用户的协同过滤</strong>（下图左）和<strong>基于项目的协同过滤</strong>（下图右）。<center>![-w500](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401581131136.jpg)</center>
-
-</li>
+<li>包括<strong>基于用户的协同过滤</strong>（下图左）和<strong>基于项目的协同过滤</strong>（下图右）。<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401581131136.jpg" alt="-w500"></li>
 </ul>
 <h5 id="V1"><a href="#V1" class="headerlink" title="V1"></a>V1</h5><p>使用基于项目的协同过滤，构建商品之间的相似度库，</p>
 <h5 id="2-3-2-矩阵分解"><a href="#2-3-2-矩阵分解" class="headerlink" title="2.3.2 矩阵分解"></a>2.3.2 矩阵分解</h5><ul>
-<li>基本思想：矩阵分解，直观上来说就是把原来的大矩阵，近似分解成两个小矩阵的乘积，在实际推荐计算时不再使用大矩阵，而是使用分解得到的两个小矩阵。<center>![-w500](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401583577701.jpg)</center></li>
+<li>基本思想：矩阵分解，直观上来说就是把原来的大矩阵，近似分解成两个小矩阵的乘积，在实际推荐计算时不再使用大矩阵，而是使用分解得到的两个小矩阵。<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401583577701.jpg" alt="-w500"></li>
 <li>优点：1.比较容易编程实现，随机梯度下降方法依次迭代即可训练出模型。比较低的时间和空间复杂度，高维矩阵映射为两个低维矩阵节省了存储空间，训练过程比较费时，但是可以离线完成；2.预测的精度比较高，预测准确率要高于协同过滤以及内容过滤等方法。3. 扩展性好。</li>
 <li>缺点：1.模型训练比较费时；2.推荐结果不具有很好的可解释性，分解出来的用户和物品矩阵的每个维度无法和现实生活中的概念来解释，无法用现实概念给每个维度命名，只能理解为潜在语义空间。</li>
 </ul>
@@ -463,31 +443,25 @@ Lookalike的目的是基于目标人群，从海量的人群中找出和目标�
 <li>弊端：末次渠道的功劳评估会被大幅高估，真实的用户行为路径更接近于产生兴趣、信任、购买意向、信息对比等各种环节，这些都是其他渠道的功劳，在这个模型中则无法统计进来。</li>
 <li>适用于：转化路径少、周期短的业务，或者就是起临门一脚作用的广告，为了吸引客户购买，点击直接落地到商品详情页</li>
 </ul>
-<center>![-w200](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401563988827.jpg)
-</center>
-
+<p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401563988827.jpg" alt="-w200"></p>
 <h4 id="3-3-线性归因"><a href="#3-3-线性归因" class="headerlink" title="3.3 线性归因"></a>3.3 线性归因</h4><ul>
 <li>定义：多个「待归因事件」对同一个「目标转化事件」作出贡献时，认为每个「待归因事件」平均分配此次功劳。</li>
 <li>优点：他是一个多触点归因模型，可以将功劳划分给转化漏斗中每个不同阶段的营销渠道。另外，他的计算方法比较简单，计算过程中的价值系数调整也比较方便。</li>
 <li>弊端：很明显，线性平均划分的方法不适用于某些渠道价值特别突出的业务。</li>
 <li>适用于：适用于企业期望在整个销售周期内保持与客户的联系，并维持品牌认知度的公司。在这种情况下，各个渠道在客户的考虑过程中，都起到相同的促进作用。</li>
 </ul>
-<center>![-w200](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401564341245.jpg)</center>
-
+<p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401564341245.jpg" alt="-w200"></p>
 <h4 id="3-4-时间衰减归因"><a href="#3-4-时间衰减归因" class="headerlink" title="3.4 时间衰减归因"></a>3.4 时间衰减归因</h4><ul>
 <li>定义：多个「待归因事件」对同一个「目标转化事件」作出贡献时，认为越靠近「目标转化事件」做出的贡献越大。</li>
 <li>优点：相比线性归因模型的平均分权重的方式，时间衰减模型让不同渠道得到了不同的权重分配，当然前提是基于“触点离转化越近，对转化影响力就越大”的前提是准确的情况下，这种模型是相对较合理的。</li>
 <li>弊端：这种假设的问题就是，在漏洞顶部的营销渠道永远不会得到一个公平的分数，因为它们总是距离转化最远的那个。</li>
 <li>适用于：客户决策周期短、销售周期短的情况。比如，做短期的促销，就打了两天的广告，那么这两天的广告理应获得较高的权重。</li>
 </ul>
-<center>![-w200](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401563062233.jpg)</center>
-
+<p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401563062233.jpg" alt="-w200"></p>
 <h4 id="3-5-位置归因"><a href="#3-5-位置归因" class="headerlink" title="3.5 位置归因"></a>3.5 位置归因</h4><ul>
 <li>定义：多个「待归因事件」对同一个「目标转化事件」作出贡献时，认为第一个和最后一个「待归因事件」各占 40% 功劳，其余「待归因事件」平分剩余的 20% 功劳。</li>
 <li>混合使用了首次互动归因和末次互动归因.</li>
-<li>适合:十分重视线索来源和促成销售渠道的公司<center>![-w200](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401565413171.jpg)</center>
-
-</li>
+<li>适合:十分重视线索来源和促成销售渠道的公司<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16401565413171.jpg" alt="-w200"></li>
 </ul>
 <h4 id="3-6-马尔科夫链"><a href="#3-6-马尔科夫链" class="headerlink" title="3.6 马尔科夫链"></a>3.6 马尔科夫链</h4><ul>
 <li>马尔科夫链(Markov Chain)，描述了一种状态序列，其每个状态值取决于前面有限个状态，马尔科夫链是具有马尔科夫性质的随机变量的一个数列。</li>
@@ -499,16 +473,10 @@ Lookalike的目的是基于目标人群，从海量的人群中找出和目标�
 <ul>
 <li>曝光量：两周内商品的曝光次数</li>
 <li>转化率：两周内商品的订单转化次数/点击次数</li>
-<li>回购率：两周内转化的商品在未来一周内产生复购的量/两周内的转化量<center>![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16413507381583.jpg)</center>
-商品划分后，可拆分如下商品转化路径，不同转化都存在对应策略。
-<center>![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16414434541159.jpg)
-</center>
-
-</li>
+<li>回购率：两周内转化的商品在未来一周内产生复购的量/两周内的转化量<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16413507381583.jpg" alt=""><br>商品划分后，可拆分如下商品转化路径，不同转化都存在对应策略。<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16414434541159.jpg" alt=""></li>
 </ul>
 <h5 id="基于项目的协同过滤"><a href="#基于项目的协同过滤" class="headerlink" title="基于项目的协同过滤"></a>基于项目的协同过滤</h5><p>1.收集用户购买信息，构建user-item矩阵<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16413688335077.jpg" alt=""><br>2.针对项目的最近邻搜索<br>先计算已评价项目和待预测项目的相似度，并以相似度作为权重，加权各已评价项目的分数，得到待预测项目的预测值。例如：要对项目 A 和项目 B 进行相似性计算，要先找出同时对 A 和 B 打过分的组合，对这些组合进行相似度计算。<br>3.产生推荐结果<br>以项目为基础的协同过滤不用考虑用户间的差别，所以精度比较差。但是却不需要用户的历史数据，或是进行用户识别。对于项目来讲，它们之间的相似性要稳定很多，因此可以离线完成工作量最大的相似性计算步骤，从而降低了在线计算量，提高推荐效率，尤其是在用户多于项目的情形下尤为显著ds</p>
-<h5 id="转化路径"><a href="#转化路径" class="headerlink" title="转化路径"></a>转化路径</h5><p><center>![-w550](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400722835686.jpg)
-</center><br>不同商品生成转化路径分析，找出影响最终支付完成的转折点。</p>
+<h5 id="转化路径"><a href="#转化路径" class="headerlink" title="转化路径"></a>转化路径</h5><p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400722835686.jpg" alt="-w550"><br>不同商品生成转化路径分析，找出影响最终支付完成的转折点。</p>
 
     </div>
 
@@ -631,14 +599,14 @@ Lookalike的目的是基于目标人群，从海量的人群中找出和目标�
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">15k</span>
+    <span title="站点总字数">13k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">14 分钟</span>
+    <span title="站点阅读时长">11 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
