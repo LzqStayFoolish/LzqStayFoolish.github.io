@@ -48,7 +48,7 @@
   <entry>
     <title>uplift模型实践与应用</title>
     <url>/2021/12/10/uplift%E6%A8%A1%E5%9E%8B%E5%AE%9E%E8%B7%B5%E4%B8%8E%E5%BA%94%E7%94%A8/</url>
-    <content><![CDATA[<h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h3><p>目前小流量实验存在的问题：</p>
+    <content><![CDATA[<h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><p>目前小流量实验存在的问题：</p>
 <ul>
 <li>小流量实验结论负向和持平偏多，产品优化策略无法获得正反馈。</li>
 <li>对照组和实验组流量都是随机划分，无法定位到真正受益人群。</li>
@@ -58,7 +58,7 @@
 <li>根据用户画像、用户活跃度和用户行为特征，通过uplift增益模型对手百实验进行增益学习，发现对手百指标的影响（正向、负向、无影响），找到产品策略”敏感人群”；筛选出高增益的用户进行人群投放，提升手百关键指标，如DAU、留存等；</li>
 </ul>
 <p>根据uplift模型，可将人群划分至下面四象限中，找到persuadables（实验带来正向效果）的人群，具体如下：<br> <center>![](/media/2021-12-13 /16393794522173.jpg)</center></p>
-<h3 id="2-理论综述"><a href="#2-理论综述" class="headerlink" title="2. 理论综述"></a>2. 理论综述</h3><h4 id="因果推断"><a href="#因果推断" class="headerlink" title="因果推断"></a>因果推断</h4><h4 id="uplift模型"><a href="#uplift模型" class="headerlink" title="uplift模型"></a>uplift模型</h4><h5 id="标签转化模型-Class-Transformation-Method"><a href="#标签转化模型-Class-Transformation-Method" class="headerlink" title="标签转化模型(Class Transformation Method)"></a>标签转化模型(Class Transformation Method)</h5><p>标签转化模型适合二分类<br>标签设置：<br><img data-src="/media/2021-12-23 /16402634500093.jpg" alt=""></p>
+<h2 id="2-理论综述"><a href="#2-理论综述" class="headerlink" title="2. 理论综述"></a>2. 理论综述</h2><h3 id="2-1-因果推断"><a href="#2-1-因果推断" class="headerlink" title="2.1 因果推断"></a>2.1 因果推断</h3><h3 id="2-2-uplift模型"><a href="#2-2-uplift模型" class="headerlink" title="2.2 uplift模型"></a>2.2 uplift模型</h3><h4 id="2-2-1-标签转化模型-Class-Transformation-Method"><a href="#2-2-1-标签转化模型-Class-Transformation-Method" class="headerlink" title="2.2.1 标签转化模型(Class Transformation Method)"></a>2.2.1 标签转化模型(Class Transformation Method)</h4><p>标签转化模型适合二分类<br>标签设置：<br><img data-src="/media/2021-12-23 /16402634500093.jpg" alt=""></p>
 <p>实验组对照组数据打通和模型打通的方法叫做class transformation method，uplift分数τ 可以表示为：</p>
 <p>理论证明：</p>
 <pre><code>下面来证明上面的式子相当于是求P（Z = 1|X）
@@ -73,13 +73,13 @@
 </code></pre><p>模型优点：</p>
 <pre><code>实际上，Z = 1 Z=1Z=1就是实验组中下单的用户和对照组中未下单的用户，因此可以直接将实验组和对照组用户合并，使用一个模型建模，实现了数据层面和模型层面的打通。
 预测时，模型预测的结果就是uplift score，这点与差分响应模型不同。
-</code></pre><h5 id="S-learner（Meta-Learning）"><a href="#S-learner（Meta-Learning）" class="headerlink" title="S-learner（Meta-Learning）"></a>S-learner（Meta-Learning）</h5><p>把对照组和实验组放在一起建模，把实验分组作为特征加入训练特征。如果该样本进入实验组vs对照组模型预测的差异作为对实验影响的估计。<br>计算步骤：</p>
+</code></pre><h4 id="2-2-2-S-learner（Meta-Learning）"><a href="#2-2-2-S-learner（Meta-Learning）" class="headerlink" title="2.2.2 S-learner（Meta-Learning）"></a>2.2.2 S-learner（Meta-Learning）</h4><p>把对照组和实验组放在一起建模，把实验分组作为特征加入训练特征。如果该样本进入实验组vs对照组模型预测的差异作为对实验影响的估计。<br>计算步骤：</p>
 <ol>
 <li>基于变量X和干预W训练预测模型</li>
 <li>分别估计干预和不干预时的得分，差值即为增量  </li>
 </ol>
 <p>S-Learner的思想很常见，和可解释机器学习中的Individual Conditional Expectation(ICE)本质是一样的， 在全样本上求平均也就是大家熟悉的Partial Dependence。</p>
-<h5 id="T-learner（Meta-Learning）"><a href="#T-learner（Meta-Learning）" class="headerlink" title="T-learner（Meta-Learning）"></a>T-learner（Meta-Learning）</h5><p>Two-Learner是基于双模型的差分模型，我们对实验组（有干预）和对照组（无干预）的购买行为进行分别建模，然后用训练所得两个模型分别对全量用户的购买行为进行预测，此时一个样本用户即可得出有干预和无干预情况下两个购买行为预测值。这两个预测值的差就是我们想要的uplift score。</p>
+<h4 id="2-2-3-T-learner（Meta-Learning）"><a href="#2-2-3-T-learner（Meta-Learning）" class="headerlink" title="2.2.3 T-learner（Meta-Learning）"></a>2.2.3 T-learner（Meta-Learning）</h4><p>Two-Learner是基于双模型的差分模型，我们对实验组（有干预）和对照组（无干预）的购买行为进行分别建模，然后用训练所得两个模型分别对全量用户的购买行为进行预测，此时一个样本用户即可得出有干预和无干预情况下两个购买行为预测值。这两个预测值的差就是我们想要的uplift score。</p>
 <p>Step1：分别计算对照组和实验组的预测值</p>
 <p>[魏倩 &gt; 精算项目技术框架 &gt; image2021-10-14_15-12-27.png]</p>
 <p>Step2：计算Uplift Score</p>
@@ -88,7 +88,7 @@
 <p>[魏倩 &gt; 精算项目技术框架 &gt; image2021-10-14_15-12-27.png]</p>
 <p>Step2：计算Uplift Score</p>
 <p>[魏倩 &gt; 精算项目技术框架 &gt; image2021-10-14_15-14-38.png] </p>
-<h5 id="R-learner（Meta-Learning）"><a href="#R-learner（Meta-Learning）" class="headerlink" title="R-learner（Meta-Learning）"></a>R-learner（Meta-Learning）</h5><h5 id="X-learner（Meta-Learning）"><a href="#X-learner（Meta-Learning）" class="headerlink" title="X-learner（Meta-Learning）"></a>X-learner（Meta-Learning）</h5><p>X-Learner是针对上述提到的问题对T-Learner和S-Learner进行了融合。步骤如下：</p>
+<h4 id="2-2-4-R-learner（Meta-Learning）"><a href="#2-2-4-R-learner（Meta-Learning）" class="headerlink" title="2.2.4 R-learner（Meta-Learning）"></a>2.2.4 R-learner（Meta-Learning）</h4><h4 id="2-2-5-X-learner（Meta-Learning）"><a href="#2-2-5-X-learner（Meta-Learning）" class="headerlink" title="2.2.5 X-learner（Meta-Learning）"></a>2.2.5 X-learner（Meta-Learning）</h4><p>X-Learner是针对上述提到的问题对T-Learner和S-Learner进行了融合。步骤如下：</p>
 <ol>
 <li>分别对对照组和实验组进行建模得到模型M1,M2和T-Learner一样</li>
 <li>把对照组放进实验组模型预测，再把实验组放进对照组模型预测，预测值和实际值的差作为HTE的近似。这里和S-Learner的思路近似是imputation的做法。</li>
