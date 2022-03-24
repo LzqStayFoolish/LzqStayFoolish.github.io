@@ -51,10 +51,8 @@
     <content><![CDATA[<h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><p>目前小流量实验存在的问题：</p>
 <ul>
 <li>小流量实验结论负向和持平偏多，产品优化策略无法获得正反馈。</li>
-<li>对照组和实验组流量都是随机划分，无法定位到真正受益人群。</li>
-</ul>
-<p>核心解法思路：</p>
-<ul>
+<li>对照组和实验组流量都是随机划分，无法定位到真正受益人群。<span id="more"></span>
+核心解法思路：</li>
 <li>根据用户画像、用户活跃度和用户行为特征，通过uplift增益模型对手百实验进行增益学习，发现对手百指标的影响（正向、负向、无影响），找到产品策略”敏感人群”；筛选出高增益的用户进行人群投放，提升手百关键指标，如DAU、留存等；</li>
 </ul>
 <p>根据uplift模型，可将人群划分至下面四象限中，找到persuadables（实验带来正向效果）的人群，具体如下：<br> <center>![](/media/2021-12-13 /16393794522173.jpg)</center></p>
@@ -142,7 +140,7 @@
   <entry>
     <title>商业分析方法与模型</title>
     <url>/2021/12/22/%E5%95%86%E4%B8%9A%E5%88%86%E6%9E%90%E6%96%B9%E6%B3%95%E4%B8%8E%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<h2 id="提升用户转化（付费）"><a href="#提升用户转化（付费）" class="headerlink" title="提升用户转化（付费）"></a>提升用户转化（付费）</h2><p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400876481662.jpg" alt="-w300"><br>提高电商平台的订单转化率，我们需要从三个方面入手：商品分析、用户分析和归因分析。</p>
+    <content><![CDATA[<h2 id="提升用户转化（付费）"><a href="#提升用户转化（付费）" class="headerlink" title="提升用户转化（付费）"></a>提升用户转化（付费）</h2><p><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400876481662.jpg" alt="-w300"><br>提高电商平台的订单转化率，我们需要从三个方面入手：商品分析、用户分析和归因分析。<br><span id="more"></span></p>
 <h3 id="1-商品分析"><a href="#1-商品分析" class="headerlink" title="1. 商品分析"></a>1. 商品分析</h3><h5 id="1-1-转化路径分析"><a href="#1-1-转化路径分析" class="headerlink" title="1.1 转化路径分析"></a>1.1 转化路径分析</h5><p>电商购买流程的主路径为：<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/03/23/16400722835686.jpg" alt="-w550"><br>针对关键路径转化“UV-点击”、“点击-加入购物车”、“购物车-支付成功”，不同商品的转化率进行比较分析，监测SKU的更新变化。</p>
 <h5 id="1-2-商品分类分析"><a href="#1-2-商品分类分析" class="headerlink" title="1.2 商品分类分析"></a>1.2 商品分类分析</h5><p>根据商品品类的转化率，利用<strong>波士顿矩阵</strong>将商品品类分成以下4种。</p>
 <ul>
