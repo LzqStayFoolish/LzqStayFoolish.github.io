@@ -55,7 +55,7 @@
 核心解法思路：</li>
 <li>根据用户画像、用户活跃度和用户行为特征，通过uplift增益模型对手百实验进行增益学习，发现对手百指标的影响（正向、负向、无影响），找到产品策略”敏感人群”；筛选出高增益的用户进行人群投放，提升手百关键指标，如DAU、留存等；</li>
 </ul>
-<p>根据uplift模型，可将人群划分至下面四象限中，找到persuadables（实验带来正向效果）的人群，具体如下：<br> <center>![](https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/04/11/16393794522173.jpg)</center></p>
+<p>根据uplift模型，可将人群划分至下面四象限中，找到persuadables（实验带来正向效果）的人群，具体如下：<br> <img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/04/11/16393794522173.jpg" alt=""></p>
 <h2 id="2-理论综述"><a href="#2-理论综述" class="headerlink" title="2. 理论综述"></a>2. 理论综述</h2><h3 id="2-1-混淆变量"><a href="#2-1-混淆变量" class="headerlink" title="2.1 混淆变量"></a>2.1 混淆变量</h3><p>混淆变量是指在解释变量X和Y之间的因果关系时，存在的同时影响$X$和$Y$的变量$C$，如果不对其进行控制，会得出虚假的因果关系。<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/04/11/16488827444271.jpg" alt="-w229"></p>
 <h3 id="2-2-辛普森悖论"><a href="#2-2-辛普森悖论" class="headerlink" title="2.2 辛普森悖论"></a>2.2 辛普森悖论</h3><p>辛普森悖论（Simpson’s paradox）是概率统计中的一种现象：在混淆变量 Z 的每一个分层上，变量 X 和变量 Y 都表现出一致的相关性，但是在 Z 的整体上，X 和 Y 却呈现出与之相反的相关性。该现象于 20 世纪初就有人讨论，但一直到 1951 年 E.H.辛普森在他发表的论文中阐述此一现象后，该现象才算正式地被描述解释，辛普森悖论这个名字是由柯林·布莱斯（Colin R. Blyth）在 1972 年提出的。</p>
 <h4 id="2-2-1-神奇药物"><a href="#2-2-1-神奇药物" class="headerlink" title="2.2.1 神奇药物"></a>2.2.1 神奇药物</h4><p>以 BBG 药物（Bad/Bad/Good Drug）之谜为例，假设有一种新药 D，这种新药似乎可以降低心脏病发作的风险，我们通过临床观测收集到了如下数据（数据来自观测实验而非随机化实验）：</p>
@@ -329,9 +329,9 @@
 <li>单样本均值检验（One-sample t-test）：用于检验 总体方差未知、正态数据或近似正态的 单样本的均值 是否与 已知的总体均值相等；</li>
 <li>两独立样本均值检验（Independent two-sample t-test）：用于检验 两对独立的 正态数据或近似正态的 样本的均值 是否相等，这里可根据总体方差是否相等分类讨论；</li>
 <li>配对样本均值检验（Dependent t-test for paired samples）：用于检验 一对配对样本的均值的差 是否等于某一个值；<span id="more"></span>
-<h3 id="1-1-单样本均值检验"><a href="#1-1-单样本均值检验" class="headerlink" title="1.1 单样本均值检验"></a>1.1 单样本均值检验</h3></li>
+</li>
 </ul>
-<ol>
+<h3 id="1-1-单样本均值检验"><a href="#1-1-单样本均值检验" class="headerlink" title="1.1 单样本均值检验"></a>1.1 单样本均值检验</h3><ol>
 <li>要求：总体方差未知，否则就可以利用<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0" xmlns="http://www.w3.org/2000/svg" width="1.636ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 723 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D44D" d="M58 8Q58 23 64 35Q64 36 329 334T596 635L586 637Q575 637 512 637H500H476Q442 637 420 635T365 624T311 598T266 548T228 469Q227 466 226 463T224 458T223 453T222 450L221 448Q218 443 202 443Q185 443 182 453L214 561Q228 606 241 651Q249 679 253 681Q256 683 487 683H718Q723 678 723 675Q723 673 717 649Q189 54 188 52L185 49H274Q369 50 377 51Q452 60 500 100T579 247Q587 272 590 277T603 282H607Q628 282 628 271Q547 5 541 2Q538 0 300 0H124Q58 0 58 8Z"></path></g></g></g></svg></mjx-container>检验（也就是正态检验）正态数据或近似正态</li>
 <li>应用场景举例：<ul>
 <li>从某厂生产的零件中随机抽取若干件，检验其某种规格的均值是否与要求的规格相等（双侧检验）</li>
