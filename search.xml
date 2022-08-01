@@ -489,7 +489,7 @@
   <entry>
     <title>EM算法</title>
     <url>/2022/08/01/EM%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="1-EM算法统计背景"><a href="#1-EM算法统计背景" class="headerlink" title="1. EM算法统计背景"></a>1. EM算法统计背景</h1><p>EM算法是一种迭代优化策略，由于它的计算方法中每一次迭代都分两步，其中一个为期望步（E步），另一个为极大步（M步），所以算法被称为EM算法（Expectation-Maximization Algorithm）。EM算法为了解决<strong>数据缺失情况</strong>下的<strong>参数估计</strong>问题。<br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/08/01/16592835642903.jpg" alt=""></p>
+    <content><![CDATA[<h1 id="1-EM算法统计背景"><a href="#1-EM算法统计背景" class="headerlink" title="1. EM算法统计背景"></a>1. EM算法统计背景</h1><p>EM算法是一种迭代优化策略，由于它的计算方法中每一次迭代都分两步，其中一个为期望步（E步），另一个为极大步（M步），所以算法被称为EM算法（Expectation-Maximization Algorithm）。EM算法为了解决<strong>数据缺失情况</strong>下的<strong>参数估计</strong>问题。<br><span id="more"></span><br><img data-src="https://casterliu-blog-1302156644.cos.ap-beijing.myqcloud.com/casterliu_blog/2022/08/01/16592835642903.jpg" alt=""></p>
 <h2 id="1-1-参数估计和假设检验"><a href="#1-1-参数估计和假设检验" class="headerlink" title="1.1 参数估计和假设检验"></a>1.1 参数估计和假设检验</h2><h3 id="1-1-1-区别"><a href="#1-1-1-区别" class="headerlink" title="1.1.1 区别"></a>1.1.1 区别</h3><ul>
 <li>参数估计是以样本资料估计总体参数的真值，而假设检验是以样本资料对总体的先验假设是否成立；</li>
 <li>参数估计中的区间估计是以样本统计量为中心的双侧之心区间，假设检验既有单侧检验又有双侧检验；  </li>
